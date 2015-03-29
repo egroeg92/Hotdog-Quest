@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+guid: 24f9b119a90dd0b49bb6cc2fc2810bd8
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - game: {instanceID: 0}
+  - server: {fileID: 11446094, guid: c9cd26d1c6f906e459d485c5258b0566, type: 2}
+  - client: {fileID: 11425456, guid: 933d6fa5ccfef4349b78511ca4e95cd6, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
