@@ -24,13 +24,15 @@ public class Menu : MonoBehaviour {
 	void OnGUI(){
 
 		if (Network.peerType == NetworkPeerType.Disconnected) {
+
 			if (GUI.Button (new Rect (100, 100, 100, 25), "Start Client")) {
 				Network.Connect (IP, Port);
 				game.gameObject.AddComponent<Client>();
 				game.client = game.GetComponent<Client>();
 				game.client.game = game;
-
 				game.client.networkView = networkView;
+
+				//game.client.initializeConnection();
 
 
 			}
@@ -49,7 +51,7 @@ public class Menu : MonoBehaviour {
 				GUI.Label (new Rect (100, 100, 100, 25), "Client");
 
 				if (GUI.Button (new Rect (100, 125, 100, 25), "Logout")) {
-					Network.Disconnect (250);
+
 					//remove client
 					game.client.destroy();
 
@@ -60,10 +62,11 @@ public class Menu : MonoBehaviour {
 			}
 			if (Network.peerType == NetworkPeerType.Server){
 				GUI.Label(new Rect(100,100,100,25), "Server");
-				GUI.Label(new Rect(100,125,100,25), "Connections : "+ Network.connections.Length);
+				GUI.Label(new Rect(100,125,100,25), "Connections : " + Network.connections.Length);
+				GUI.Label(new Rect(100,150,100,25), "List Connections : "+ game.server.players.Count);
 
-				if(GUI.Button(new Rect(100,150,100,25),"Logout")){
-					Network.Disconnect(250);
+				if(GUI.Button(new Rect(100,175,100,25),"Logout")){
+
 					game.server.destroy();
 
 

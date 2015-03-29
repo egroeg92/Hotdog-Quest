@@ -16,7 +16,7 @@ Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\te
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\test_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.068 seconds
+- Completed reload, in  0.065 seconds
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
@@ -26,19 +26,19 @@ Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\te
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-yay
+server started
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-send update
+Player  connected from 142.157.128.55
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-send update
+Player  connected from 142.157.128.55
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-send update
+Player  connected from 142.157.128.55
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 

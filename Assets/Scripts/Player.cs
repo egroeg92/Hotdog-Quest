@@ -15,4 +15,17 @@ public class Player : MonoBehaviour {
 	void Update () {
 	
 	}
+
+	public void disablePlayerControls(){
+		CharacterController cc = GetComponent<CharacterController>();
+		//MouseLook ml = GetComponent<MouseLook> ();
+		
+		MonoBehaviour cm = gameObject.GetComponent ("CharacterMotor") as MonoBehaviour;
+		//MonoBehaviour fps = gameObject.GetComponent ("FPSInputController") as MonoBehaviour;
+		
+		//fps.enabled = false;
+		cm.enabled = false;
+		cc.enabled = false;
+		//ml.enabled = false;
+	}
 }
