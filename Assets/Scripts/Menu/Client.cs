@@ -43,14 +43,14 @@ public class Client : MonoBehaviour{
 
 	[RPC]
 	public void sendUpdate(){
-		Debug.Log ("send update ");
-		networkView.RPC("receiveUpdate", RPCMode.Server, viewID);
-
+	
 	}
 	
 	[RPC]
-	public void receiveUpdate(NetworkViewID id ){
-		
+	public void receiveUpdate(Vector3 p1Pos, Vector3 p2Pos){
+		game.updateOtherPlayer (1, p1Pos);
+		game.updateOtherPlayer (2, p2Pos);
+
 	}
 
 

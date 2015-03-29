@@ -63,7 +63,7 @@ public class Menu : MonoBehaviour {
 			if (Network.peerType == NetworkPeerType.Server){
 				GUI.Label(new Rect(100,100,100,25), "Server");
 				GUI.Label(new Rect(100,125,100,25), "Connections : " + Network.connections.Length);
-				GUI.Label(new Rect(100,150,100,25), "List Connections : "+ game.server.players.Count);
+				//GUI.Label(new Rect(100,150,100,25), "List Connections : "+ game.server.players.Count);
 
 				if(GUI.Button(new Rect(100,175,100,25),"Logout")){
 

@@ -3,14 +3,16 @@ using System.Collections;
 
 public class GameController : MonoBehaviour {
 
-	Player Player1;
-	Player Player2;
+	public Player Player1;
+	public Player Player2;
 
 	Player thisPlayer;
 	Player otherPlayer;
 
 	public Client client;
 	public Server server;
+
+	int playerId = -1;
 
 	NetworkPeerType peerType;
 
@@ -23,7 +25,7 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(client != null)
+		if(client != null && thisPlayer != null)
 			client.updatePosition (thisPlayer.transform.position);
 
 	}
@@ -45,17 +47,33 @@ public class GameController : MonoBehaviour {
 			Debug.Log ("Set to player 1");
 			thisPlayer = Player1;
 			otherPlayer = Player2;
-
-
-
+			playerId = 1;
 
 		} else {
 			Debug.Log("set to player 2");
 			thisPlayer = Player2;
 			otherPlayer = Player1;
+			playerId = 2;
 		}
 		
-		otherPlayer.disablePlayerControls();
+		thisPlayer.enablePlayerControls();
+	}
+
+	public void updatePlayer(int id, Vector3 position){
+		Debug.Log (playerId);
+		if (id == 1) {
+			Player1.transform.position = position;
+		} else if (id == 2)  {
+			Player2.transform.position = position;
+		}
+
+	}
+	public void updateOtherPlayer(int id, Vector3 position){
+
+		if (id != playerId) {
+			otherPlayer.transform.position = position;
+		} 
+		
 	}
 
 

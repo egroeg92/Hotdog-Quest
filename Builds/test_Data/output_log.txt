@@ -16,29 +16,159 @@ Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\te
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\test_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.065 seconds
+- Completed reload, in  0.070 seconds
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\test_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\test_Data\Managed\System.dll (this message is harmless)
-142.157.128.55
+10.0.1.12
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-server started
+True
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-Player  connected from 142.157.128.55
+Set to player 1
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-Player  connected from 142.157.128.55
+TypeLoadException: Could not load type '$SubtractNewPlatformVelocity$3' from assembly 'Assembly-UnityScript-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null'.
+  at CharacterMotor.UpdateFunction () [0x00000] in <filename unknown>:0 
+  at CharacterMotor.FixedUpdate () [0x00000] in <filename unknown>:0 
+ 
+(Filename:  Line: -1)
+
+False
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-Player  connected from 142.157.128.55
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+True
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Set to player 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+False
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+True
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+set to player 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+True
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+set to player 2
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+Can't send RPC function since no connection was started.
+ 
+(Filename:  Line: 2463)
+
+True
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+Set to player 1
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+False
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
