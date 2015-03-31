@@ -9,7 +9,6 @@ public class NPC : MonoBehaviour {
 
 	public NPC (Vector3 position) {
 		this.transform.position = position;
-		// steering = new SteeringManager(this);
 	}
 
 	// Update is called once per frame
