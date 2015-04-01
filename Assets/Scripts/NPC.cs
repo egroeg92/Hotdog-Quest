@@ -28,4 +28,11 @@ public class NPC : MonoBehaviour {
 		return this.transform.position;
 	}
 
+	protected Vector3 truncate (Vector3 vector, float max) {
+		float i;
+		i = max / vector.magnitude;
+		i = i < 1.0f ? i : 1.0f;
+		vector *= i;
+		return vector;
+	}
 }

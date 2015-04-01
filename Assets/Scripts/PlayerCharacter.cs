@@ -26,12 +26,4 @@ public class PlayerCharacter : NPC {
 		transform.Translate(velocity * Time.deltaTime);
 
 	}
-
-	private Vector3 truncate (Vector3 vector, float max) {
-        float i;
-        i = max / vector.magnitude;
-        i = i < 1.0f ? i : 1.0f;
-        vector *= i;
-        return vector;
-    }
 }
