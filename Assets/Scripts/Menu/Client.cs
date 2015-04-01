@@ -29,18 +29,6 @@ public class Client : MonoBehaviour{
 	}
 	[RPC]
 	void receiveMap(NetworkPlayer p, Vector3 sizes, Vector3 pos, Vector3 plane, int count, int size){
-		//Debug.Log (pos.Length);
-		//Debug.Log (sizes.Length);
-
-
-		//MemoryStream pms = new MemoryStream (System.Convert.FromBase64String(pos));
-		//MemoryStream sms = new MemoryStream (System.Convert.FromBase64String(sizes));
-
-		//BinaryFormatter bf = new BinaryFormatter ();
-
-		//ArrayList po = bf.Deserialize (pms) as ArrayList;
-		//ArrayList si = bf.Deserialize (sms) as ArrayList;
-		Debug.Log (pos);
 
 		game.addPosition (pos);
 		game.addSize (sizes);

@@ -43,6 +43,7 @@ public class Server : MonoBehaviour{
 
 	void OnPlayerConnected(NetworkPlayer player){
 		Debug.Log("Player " + " connected from " + player.ipAddress);
+
 		connections++;
 		if (net1 == null) {
 			player1 = player;
@@ -52,6 +53,7 @@ public class Server : MonoBehaviour{
 			net2 = player2.ToString();
 		}else
 			Debug.LogError ("error : both player slots are filled");
+
 		sendMap (player);
 
 		if (connections == 2)
@@ -60,6 +62,8 @@ public class Server : MonoBehaviour{
 		networkView.RPC ("connectedToServer", RPCMode.All, player, connections);
 
 	}
+
+
 	[RPC]
 	void sendMap(NetworkPlayer p){
 		Debug.Log ("sending map...");
@@ -92,6 +96,8 @@ public class Server : MonoBehaviour{
 		} else {
 			Debug.Log ("trying to update wrong player");
 		}
+
+
 	}
 
 	[RPC]
