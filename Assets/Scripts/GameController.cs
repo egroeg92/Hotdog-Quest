@@ -29,18 +29,6 @@ public class GameController : MonoBehaviour {
 			client.updatePosition (thisPlayer.transform.position);
 
 	}
-	void OnGUI(){
-
-		if (client != null) {
-			if (GUI.Button (new Rect (100, 150, 100, 25), "send message")) {
-				
-				client.sendUpdate ();
-				
-				
-				
-			}
-		}
-	}
 
 	public void setPlayer(int player){
 		if (player == 1) {

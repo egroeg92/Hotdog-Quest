@@ -1,13 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\mapGen.cs">
     <Files>
-      <File FileName="Assets\Scripts\Menu\Client.cs" Line="21" Column="25" />
-      <File FileName="Assets\Scripts\Menu\Menu.cs" Line="65" Column="86" />
-      <File FileName="Assets\Scripts\GameController.cs" Line="9" Column="20" />
-      <File FileName="Assets\Scripts\Player.cs" Line="29" Column="5" />
-      <File FileName="Assets\Scripts\Menu\Server.cs" Line="37" Column="24" />
-      <File FileName="..\..\Comp396Stealth\unity\Assets\scripts\Player.cs" Line="37" Column="1" />
+      <File FileName="Assets\Scripts\mapGen.cs" Line="57" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

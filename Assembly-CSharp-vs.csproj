@@ -53,6 +53,7 @@
      <Compile Include="Assets\Scripts\NPC.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
      <Compile Include="Assets\Scripts\SteeringManager.cs" />
+     <Compile Include="Assets\Scripts\mapGen.cs" />
  <Reference Include="Assembly-UnityScript-firstpass">
  <HintPath>C:/Users/George/Documents/Mcgill/Comp521MCG/project/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
  </Reference>
