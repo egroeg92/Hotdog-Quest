@@ -25,14 +25,15 @@ public class Menu : MonoBehaviour {
 
 		if (Network.peerType == NetworkPeerType.Disconnected) {
 
+			IP = GUI.TextField(new Rect (100, 75, 100, 25), IP);
+
 			if (GUI.Button (new Rect (100, 100, 100, 25), "Start Client")) {
+				Debug.Log (IP);
 				Network.Connect (IP, Port);
 				game.gameObject.AddComponent<Client>();
 				game.client = game.GetComponent<Client>();
 				game.client.game = game;
 				game.client.networkView = networkView;
-
-				//game.client.initializeConnection();
 
 
 			}
@@ -58,6 +59,7 @@ public class Menu : MonoBehaviour {
 				}
 
 
+
 			}
 			if (Network.peerType == NetworkPeerType.Server){
 				GUI.Label(new Rect(100,100,100,25), "Server");
@@ -70,6 +72,7 @@ public class Menu : MonoBehaviour {
 
 
 				}
+
 
 			}
 		}
