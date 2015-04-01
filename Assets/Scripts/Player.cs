@@ -17,6 +17,7 @@ public class Player : MonoBehaviour {
 	}
 
 	public void disablePlayerControls(){
+		Debug.Log ("sup");
 		CharacterController cc = GetComponent<CharacterController>();
 		//MouseLook ml = GetComponent<MouseLook> ();
 		
@@ -29,6 +30,8 @@ public class Player : MonoBehaviour {
 		//ml.enabled = false;
 	}
 	public void enablePlayerControls(){
+		Debug.Log ("hello");
+
 		CharacterController cc = GetComponent<CharacterController>();
 		//MouseLook ml = GetComponent<MouseLook> ();
 		

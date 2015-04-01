@@ -1,6 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using System.IO;
+
 public class Server : MonoBehaviour{
 
 	public GameController game;
@@ -17,13 +21,14 @@ public class Server : MonoBehaviour{
 
 	void Start(){
 		Debug.Log ("server started");
-
+		game.createMap ();
 	}
 
 	int connections = 0;
 
 	public void destroy(){
 		game.server = null;
+		game.destroyCity ();
 		Network.Disconnect(250);
 		Destroy (this);
 	}
@@ -45,17 +50,39 @@ public class Server : MonoBehaviour{
 		} else if (net2 == null) {
 			player2 = player;
 			net2 = player2.ToString();
-		}
-		else
+		}else
 			Debug.LogError ("error : both player slots are filled");
+		sendMap (player);
+
+		if (connections == 2)
+			game.instantiatePlayers ();
 
 		networkView.RPC ("connectedToServer", RPCMode.All, player, connections);
 
 	}
 	[RPC]
+	void sendMap(NetworkPlayer p){
+		Debug.Log ("sending map...");
+
+		ArrayList sizes = game.getMap ().buildingSizes;
+		ArrayList pos = game.getMap ().buildingPositions;
+		Vector3 planeSize = game.getMap ().plane.transform.localScale;
+	
+		for (int i = 0; i < sizes.Count; i++) {
+			networkView.RPC ("receiveMap", RPCMode.All, p, sizes[i],pos[i],planeSize, i, sizes.Count);
+		}
+
+			
+	}
+	[RPC]
+	void receiveMap(NetworkPlayer p, Vector3 sizes, Vector3 pos, Vector3 plane, int count, int size){
+		
+	}
+	[RPC]
 	void sendClientUpdates(){
 		networkView.RPC ("receiveUpdate", RPCMode.All, game.Player1.transform.position, game.Player2.transform.position);
 	}
+
 	[RPC]
 	void updatePlayerPosition(Vector3 position, NetworkPlayer player){
 		if (player == player1) {
@@ -83,12 +110,7 @@ public class Server : MonoBehaviour{
 		connections--;
 		
 	}
-	[RPC]
-	public void sendUpdate(){
-		Debug.Log ("send update");
 
-		
-	}
 	
 	[RPC]
 	public void receiveUpdate(Vector3 pos1, Vector3 pos2){

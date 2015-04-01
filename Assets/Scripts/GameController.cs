@@ -16,10 +16,16 @@ public class GameController : MonoBehaviour {
 
 	NetworkPeerType peerType;
 
+	public mapGen mapGenerator;
+	GameObject map;
+	ArrayList buildingPos = new ArrayList();
+	ArrayList buildingSize = new ArrayList();
+
+
 	// Use this for initialization
 	void Start () {
-		Player1 = GameObject.Find ("Player1").GetComponent<Player>() ;
-		Player2 = GameObject.Find ("Player2").GetComponent<Player>();
+		//Player1 = GameObject.Find ("Player1").GetComponent<Player>() ;
+		//Player2 = GameObject.Find ("Player2").GetComponent<Player>();
 
 	}
 	
@@ -33,12 +39,16 @@ public class GameController : MonoBehaviour {
 	public void setPlayer(int player){
 		if (player == 1) {
 			Debug.Log ("Set to player 1");
+			instantiatePlayers();
 			thisPlayer = Player1;
 			otherPlayer = Player2;
 			playerId = 1;
 
+
 		} else {
 			Debug.Log("set to player 2");
+			instantiatePlayers();
+
 			thisPlayer = Player2;
 			otherPlayer = Player1;
 			playerId = 2;
@@ -46,9 +56,12 @@ public class GameController : MonoBehaviour {
 		
 		thisPlayer.enablePlayerControls();
 	}
+	public void instantiatePlayers(){
+		Player1 = (Player) Instantiate(Player1);
+		Player2 = (Player) Instantiate(Player2);
+	}
 
 	public void updatePlayer(int id, Vector3 position){
-		Debug.Log (playerId);
 		if (id == 1) {
 			Player1.transform.position = position;
 		} else if (id == 2)  {
@@ -64,7 +77,43 @@ public class GameController : MonoBehaviour {
 		
 	}
 
+	public void createMap(){
+		mapGenerator = Instantiate (mapGenerator) as mapGen;
 
+	}
+	public mapGen getMap(){
+		return mapGenerator;
+	}
+	public void createCity(Vector3 plane){
+		GameObject p = GameObject.CreatePrimitive(PrimitiveType.Plane);
+		p.transform.localScale = plane;
+		p.tag = "city";
+		GameObject b;
+		for (int i = 0; i< buildingSize.Count; i++) {
+			b = GameObject.CreatePrimitive(PrimitiveType.Cube);
+			b.transform.localScale = (Vector3)buildingSize[i];
+			b.transform.position = (Vector3)buildingPos[i];
+			b.tag = "city";
+		}
+
+	}
+	public void addPosition(Vector3 p){
+		buildingPos.Add (p);
+	}
+	
+	public void addSize(Vector3 s){
+		buildingSize.Add (s);
+	}
+
+	public void destroyCity(){
+		buildingPos.Clear();
+		buildingSize.Clear();
+
+		GameObject[] city = GameObject.FindGameObjectsWithTag ("city");
+		foreach (GameObject g in city)
+			Destroy (g);
+
+	}
 
 
 

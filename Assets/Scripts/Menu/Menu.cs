@@ -52,7 +52,6 @@ public class Menu : MonoBehaviour {
 
 				if (GUI.Button (new Rect (100, 125, 100, 25), "Logout")) {
 
-					//remove client
 					game.client.destroy();
 
 
