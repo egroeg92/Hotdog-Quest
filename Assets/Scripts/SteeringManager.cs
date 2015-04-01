@@ -27,14 +27,14 @@ public class SteeringManager : MonoBehaviour {
 
     // The update method.
     // Should be called after all behaviors have been invoked
-    public void update(){
+    public Vector3 update(){
 		Vector3 velocity = host.getVelocity();
 
         steering = truncate(steering, MAX_FORCE);
 		velocity += steering;
 		velocity = truncate(velocity, host.getMaxVelocity());
 
-	    host.transform.position += velocity;
+        return velocity;
 	}
 
     // Reset the internal steering force.
@@ -70,7 +70,6 @@ public class SteeringManager : MonoBehaviour {
 		desired *= host.getMaxVelocity();
 
 		force = desired - host.getVelocity();
-        Debug.Log(force);
 		return force;
     }
     private Vector3 doWander(){
