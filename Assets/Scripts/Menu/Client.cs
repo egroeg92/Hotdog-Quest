@@ -37,9 +37,6 @@ public class Client : MonoBehaviour{
 			game.createCity(plane);
 
 
-
-		//game.createCity (po, si, plane);
-
 	}
 
 	[RPC]

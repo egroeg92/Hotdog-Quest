@@ -43,8 +43,7 @@ public class GameController : MonoBehaviour {
 			thisPlayer = Player1;
 			otherPlayer = Player2;
 			playerId = 1;
-
-
+		
 		} else {
 			Debug.Log("set to player 2");
 			instantiatePlayers();
@@ -53,12 +52,22 @@ public class GameController : MonoBehaviour {
 			otherPlayer = Player1;
 			playerId = 2;
 		}
+		Player1.transform.position = new Vector3 (1, 2, 1);
 		
+		Player2.transform.position = new Vector3 (3, 2, 1);
+
+
 		thisPlayer.enablePlayerControls();
+		otherPlayer.disablePlayerControls ();
 	}
 	public void instantiatePlayers(){
 		Player1 = (Player) Instantiate(Player1);
 		Player2 = (Player) Instantiate(Player2);
+
+		Player1.renderer.material.color =(Color.blue);
+		Player2.renderer.material.color =(Color.red);
+		
+
 	}
 
 	public void updatePlayer(int id, Vector3 position){
@@ -85,6 +94,7 @@ public class GameController : MonoBehaviour {
 		return mapGenerator;
 	}
 	public void createCity(Vector3 plane){
+		Debug.Log ("map gen");
 		GameObject p = GameObject.CreatePrimitive(PrimitiveType.Plane);
 		p.transform.localScale = plane;
 		p.tag = "city";
@@ -113,6 +123,8 @@ public class GameController : MonoBehaviour {
 		foreach (GameObject g in city)
 			Destroy (g);
 
+		Destroy (thisPlayer);
+		Destroy (otherPlayer);
 	}
 
 
