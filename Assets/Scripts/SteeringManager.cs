@@ -7,6 +7,10 @@ public class SteeringManager : MonoBehaviour {
     public float MAX_FORCE = 9.0f;
     public float MAX_SEE_AHEAD = 3.0f;
     public float MAX_AVOID_FORCE = 5.0f;
+    public float CIRCLE_DISTANCE = 1.0f;
+    public float CIRCLE_RADIUS = 1.5f;
+    private float ANGLE_CHANGE = 15;
+    private float wanderAngle;
     private Vector3 ahead;
     private Vector3 ahead2;
 
@@ -14,6 +18,7 @@ public class SteeringManager : MonoBehaviour {
     public SteeringManager(NPC host) {
         this.host   = host;
         this.steering   = Vector3.zero;
+        this.wanderAngle = 0f;
     }
 
     // The public API (one method for each behavior)
@@ -25,7 +30,9 @@ public class SteeringManager : MonoBehaviour {
         steering += doFlee(target);
     }
 
-    public void wander(){}
+    public void wander(){
+        steering += doWander();
+    }
     public void evade(NPC target){}
     public void pursuit(NPC target){}
 
@@ -33,7 +40,6 @@ public class SteeringManager : MonoBehaviour {
     // Should be called after all behaviors have been invoked
     public Vector3 update(){
         // Set steering vector back to zero
-        reset();
 		Vector3 velocity = host.getVelocity();
 
         // always do collision avoidance
@@ -136,15 +142,36 @@ public class SteeringManager : MonoBehaviour {
 		force = desired - host.getVelocity();
 		return force;
     }
-    private Vector3 doWander(){
 
-        return Vector3.zero;
+    private Vector3 doWander(){
+        Vector3 circleCenter = host.getVelocity();
+        circleCenter = circleCenter.normalized;
+        circleCenter *= CIRCLE_DISTANCE;
+
+        Vector3 displacement = new Vector3(1, 0, -1) * CIRCLE_RADIUS;
+
+        displacement = setAngle(displacement, wanderAngle);
+
+        wanderAngle += Random.Range(0,1.1f) * ANGLE_CHANGE - ANGLE_CHANGE *0.5f;
+
+        Vector3 wanderForce = circleCenter + displacement;
+        return wanderForce;
+
     }
+
     private Vector3 doEvade(NPC target){
         return Vector3.zero;
     }
     private Vector3 doPursuit(NPC target){
         return Vector3.zero;
+    }
+
+    private Vector3 setAngle(Vector3 vector, float val) {
+        float len = vector.magnitude;
+        vector.x = Mathf.Cos(val) * len;
+        vector.z = Mathf.Sin(val) * len;
+
+        return vector;
     }
 
     private Vector3 truncate (Vector3 vector, float max) {

@@ -29,18 +29,20 @@ public class Enemy : NPC {
 	// Update is called once per frame
 	void Update () {
 		// check to see if player is in range
-		velocity = movement.update();
+		//velocity = movement.update();
 
-		velocity = velocity.normalized;
-		velocity *= MAX_VELOCITY;
-
-		velocity = truncate(velocity, MAX_VELOCITY);
+		// velocity = velocity.normalized;
+		// velocity *= MAX_VELOCITY;
+		//
+		// velocity = truncate(velocity, MAX_VELOCITY);
 
 		// adjust calculated velocity if we see player
-		checkVisibility();
-		if(seesPlayer) {
-			steering.seek(target.position);
-		}
+		// checkVisibility();
+		// if(seesPlayer) {
+		// 	steering.seek(target.position);
+		// }
+		//steering.reset();
+		steering.wander();
 		velocity = steering.update();
 		velocity = truncate(velocity, MAX_VELOCITY);
 		//Update movement
