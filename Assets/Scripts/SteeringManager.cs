@@ -4,7 +4,11 @@ using System.Collections;
 public class SteeringManager : MonoBehaviour {
     public Vector3 steering;
     public NPC host;
-    public float MAX_FORCE = 1.0f;
+    public float MAX_FORCE = 9.0f;
+    public float MAX_SEE_AHEAD = 3.0f;
+    public float MAX_AVOID_FORCE = 5.0f;
+    private Vector3 ahead;
+    private Vector3 ahead2;
 
     // The constructor
     public SteeringManager(NPC host) {
@@ -28,7 +32,12 @@ public class SteeringManager : MonoBehaviour {
     // The update method.
     // Should be called after all behaviors have been invoked
     public Vector3 update(){
+        // Set steering vector back to zero
+        reset();
 		Vector3 velocity = host.getVelocity();
+
+        // always do collision avoidance
+        steering += collisionAvoidance();
 
         steering = truncate(steering, MAX_FORCE);
 		velocity += steering;
@@ -37,8 +46,63 @@ public class SteeringManager : MonoBehaviour {
         return velocity;
 	}
 
+	protected Vector3 collisionAvoidance(){
+        float dynamic_length = host.getVelocity().magnitude / host.getMaxVelocity();
+		ahead = host.getPosition() + host.getVelocity().normalized * dynamic_length;
+		ahead2 = Vector3.zero;
+        ahead2.x = ahead.x *0.5f;
+        ahead2.z = ahead.z *0.5f;
+
+		Debug.DrawRay(host.getPosition(), ahead, Color.green);
+		Debug.DrawRay(host.getPosition(), ahead2, Color.red);
+
+		GameObject mostThreatening = (GameObject) findMostThreateningObstacle();
+	    Vector3 avoidance = new Vector3(0, 0, 0);
+
+	    if (mostThreatening != null) {
+	        avoidance.x = ahead.x - mostThreatening.transform.position.x;
+	        avoidance.z = ahead.z - mostThreatening.transform.position.z;
+
+	        avoidance = avoidance.normalized;
+	        avoidance *= MAX_AVOID_FORCE;
+	    } else {
+	        avoidance *= 0;
+	    }
+
+	    return avoidance;
+	}
+
+    private bool lineIntersectsObstacle(Vector3 ahead, Vector3 ahead2, GameObject obstacle) {
+        // the property "center" of the obstacle is a Vector3D.
+        Vector3 center = obstacle.GetComponent<Renderer>().bounds.center;
+        float radius = obstacle.GetComponent<Renderer>().bounds.extents.magnitude;
+        return Vector3.Distance(center, ahead) <= radius
+                    || Vector3.Distance(center, ahead2) <= radius;
+    }
+
+    private GameObject findMostThreateningObstacle(){
+		GameObject mostThreatening = null;
+		GameObject[] obstacles;
+		obstacles = GameObject.FindGameObjectsWithTag("Building");
+
+		foreach (GameObject o in obstacles) {
+			bool collision = lineIntersectsObstacle(ahead, ahead2, o);
+            if(collision) {
+                Debug.Log("Obstalce ahead");
+            }
+            if (collision && (mostThreatening == null
+                    || Vector3.Distance(host.getPosition(), o.transform.position) < Vector3.Distance(host.getPosition(), mostThreatening.transform.position))) {
+	            mostThreatening = o;
+	        }
+	    }
+
+		return mostThreatening;
+	}
+
     // Reset the internal steering force.
-    public void reset() {}
+    public void reset() {
+        steering = Vector3.zero;
+    }
 
     // The internal API
     private Vector3 doSeek(Vector3 target, int slowingRadius){

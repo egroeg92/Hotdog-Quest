@@ -40,9 +40,9 @@ public class Enemy : NPC {
 		checkVisibility();
 		if(seesPlayer) {
 			steering.seek(target.position);
-			velocity = steering.update();
-			velocity = truncate(velocity, MAX_VELOCITY);
 		}
+		velocity = steering.update();
+		velocity = truncate(velocity, MAX_VELOCITY);
 		//Update movement
 		transform.Translate(velocity * Time.deltaTime);
 

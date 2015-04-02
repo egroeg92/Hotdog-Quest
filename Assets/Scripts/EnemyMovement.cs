@@ -29,6 +29,7 @@ public class EnemyMovement : MonoBehaviour {
 
 		direction = host.getCurrentWaypoint().position - host.getPosition();
 		moveVector = direction.normalized * host.getMaxVelocity();
+		Debug.Log(moveVector);
 		return(moveVector);
 	}
 
