@@ -17,6 +17,8 @@ public class GameController : MonoBehaviour {
 	public enemy1 enemy;
 	public float enemySpeed;
 	public bool enoughEnemies = false;
+	public Camera mainCamera;
+
 
 	int playerId = -1;
 
@@ -33,6 +35,7 @@ public class GameController : MonoBehaviour {
 	 */
 	void Start () {
 		enemies = new Hashtable ();
+		mainCamera.orthographic = true;
 	}
 	
 	public void createEnemies(){
@@ -78,6 +81,7 @@ public class GameController : MonoBehaviour {
 			thisPlayer = Player1;
 			otherPlayer = Player2;
 			playerId = 1;
+
 		
 		} else {
 			Debug.Log("set to player 2");
@@ -87,6 +91,9 @@ public class GameController : MonoBehaviour {
 			otherPlayer = Player1;
 			playerId = 2;
 		}
+		mainCamera.transform.position = thisPlayer.transform.position + new Vector3(0,20,0);
+		mainCamera.transform.parent = thisPlayer.transform;
+
 		Player1.transform.position = new Vector3 (1, 2, 1);
 		
 		Player2.transform.position = new Vector3 (3, 2, 1);
@@ -180,6 +187,7 @@ public class GameController : MonoBehaviour {
 			b.transform.localScale = (Vector3)buildingSize[i];
 			b.transform.position = (Vector3)buildingPos[i];
 			b.tag = "city";
+			b.renderer.material.color = Color.green;
 		}
 
 	}
@@ -203,6 +211,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void destroyPlayers(){
+		mainCamera.transform.parent = null;
 		Destroy (Player1.gameObject);
 		Destroy (Player2.gameObject);
 	}

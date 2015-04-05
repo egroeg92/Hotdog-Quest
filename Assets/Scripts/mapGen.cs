@@ -82,6 +82,7 @@ public class mapGen : MonoBehaviour {
 				building.transform.position = new Vector3(x,building.transform.localScale.y/2,z);
 				building.name = "Building";
 				building.tag = "city";
+				building.renderer.material.color = Color.green;
 
 				buildingPositions.Add(building.transform.position);
 				buildingSizes.Add(building.transform.localScale);
@@ -137,8 +138,8 @@ public class mapGen : MonoBehaviour {
 
 	}
 	void Update(){
-		foreach (Vector3[] l in lines)
-			Debug.DrawLine (l [0], l [1], Color.red);
+		//foreach (Vector3[] l in lines)
+		//	Debug.DrawLine (l [0], l [1], Color.red);
 	}
 
 }

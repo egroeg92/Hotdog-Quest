@@ -11,6 +11,7 @@ public class Server : MonoBehaviour{
 	public NetworkView networkView;
 	public int enemyAmount = 3;
 
+
 	//public Hashtable players;
 	NetworkPlayer player1 ;
 	NetworkPlayer player2 ;
@@ -26,6 +27,7 @@ public class Server : MonoBehaviour{
 		game.enemyAmount = enemyAmount;
 		game.createMap ();
 		game.createEnemies ();
+
 		//game.instantiateEnemies ();
 
 	}
