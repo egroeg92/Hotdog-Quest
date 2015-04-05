@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour {
 	
 	public void createEnemies(){
 		for (int i = 0; i< enemyAmount; i++) {
-			enemy = Instantiate(enemy, getValidPosition(), Quaternion.identity) as enemy1;
+			enemy = Instantiate(Resources.Load("Enemy", typeof(enemy1)), getValidPosition(), Quaternion.identity) as enemy1;
 			enemy.id = i;
 			enemies.Add(i,enemy);
 		}
@@ -48,8 +48,9 @@ public class GameController : MonoBehaviour {
 	
 	public void createEnemies(Hashtable positions){
 		Debug.Log ("Create Enemies");
+		enemies.Clear ();
 		foreach(DictionaryEntry d in positions){
-			enemy = Instantiate(enemy, (Vector3)d.Value, Quaternion.identity) as enemy1;
+			enemy = Instantiate(Resources.Load("Enemy", typeof(enemy1)), (Vector3)d.Value, Quaternion.identity) as enemy1;
 			enemy.id = (int)d.Key;
 			enemies.Add(enemy.id,enemy);
 		}
@@ -103,14 +104,46 @@ public class GameController : MonoBehaviour {
 		otherPlayer.disablePlayerControls ();
 	}
 	public void instantiatePlayers(){
-		Player1 = (Player) Instantiate(Player1);
-		Player2 = (Player) Instantiate(Player2);
+		Player1 = Instantiate(Resources.Load("Player", typeof(Player))) as Player;
+		Player2 = (Player) Instantiate(Resources.Load("Player", typeof(Player)));
 
+        Player1.transform.position = Vector3.zero;
+        Player2.transform.position = Vector3.zero;
+
+            
 		Player1.renderer.material.color =(Color.blue);
 		Player2.renderer.material.color =(Color.red);
 		
 
 	}
+    public void setCamera(int player)
+    {
+        if (player == 1)
+        {
+            if (Player1 != null)
+            {
+                mainCamera.transform.position = Player1.transform.position + new Vector3(0, 20, 0);
+                mainCamera.transform.parent = Player1.transform;
+            }
+        }
+        else if (player == 2)
+        {
+            if (Player2 != null)
+            {
+                mainCamera.transform.position = Player2.transform.position + new Vector3(0, 20, 0);
+                mainCamera.transform.parent = Player2.transform;
+            }
+        }
+        else
+        {
+            if (enemies.Count != 0)
+            {
+                mainCamera.transform.position = ((enemy1)enemies[Random.Range(0, enemies.Count)]).transform.position + new Vector3(0, 20, 0);
+                mainCamera.transform.parent = ((enemy1)enemies[Random.Range(0, enemies.Count)]).transform;
+            }
+        }
+
+    }
 
 	/*
 	 *  UPDATES
@@ -122,15 +155,17 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void updatePlayer(int id, Vector3 position){
+
 		if (id == 1) {
-			Player1.transform.position = position;
+			if(Player1 != null)
+				Player1.transform.position = position;
 		} else if (id == 2)  {
-			Player2.transform.position = position;
+			if(Player2 != null)
+				Player2.transform.position = position;
 		}
 
 	}
 	public void updateOtherPlayer(int id, Vector3 position){
-		Debug.Log (id);
 		if (id != playerId) {
 			otherPlayer.transform.position = position;
 		} 
@@ -197,26 +232,42 @@ public class GameController : MonoBehaviour {
 	/*
 	 *  Destroyers
 	 * 
-	 */ 
-	public void destroyCity(){
-		buildingPos.Clear();
-		buildingSize.Clear();
+	 */
+    public void destroyCity()
+    {
+        buildingPos.Clear();
+        buildingSize.Clear();
 
-		GameObject[] city = GameObject.FindGameObjectsWithTag ("city");
-		foreach (GameObject g in city)
-			Destroy (g);
+        GameObject[] city = GameObject.FindGameObjectsWithTag("city");
+        foreach (GameObject g in city)
+            Destroy(g);
 
-		Destroy (thisPlayer);
-		Destroy (otherPlayer);
-	}
+    }
 
 	public void destroyPlayers(){
 		mainCamera.transform.parent = null;
-		Destroy (Player1.gameObject);
-		Destroy (Player2.gameObject);
+		if(thisPlayer != null)
+			Destroy (thisPlayer.gameObject);
+		if(otherPlayer != null)
+			Destroy (otherPlayer.gameObject);
+	}
+
+	public void destroyPlayer(int player){
+		if (player == 1) {
+			if (Player1 != null) {
+				Destroy (Player1.gameObject);
+				Destroy (Player1);
+			}
+		}else {
+			if (Player2 != null) {
+				Destroy (Player2.gameObject);
+				Destroy (Player2);
+			}
+		}
 	}
 
 	public void destroyEnemies(){
+        Debug.Log(enemies.Count);
 		foreach (DictionaryEntry e in enemies) {
 			Destroy (((enemy1)e.Value).gameObject);
 		}

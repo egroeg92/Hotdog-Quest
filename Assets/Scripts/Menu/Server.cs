@@ -26,7 +26,7 @@ public class Server : MonoBehaviour{
 		Debug.Log ("server started");
 		game.enemyAmount = enemyAmount;
 		game.createMap ();
-		game.createEnemies ();
+
 
 		//game.instantiateEnemies ();
 
@@ -71,8 +71,12 @@ public class Server : MonoBehaviour{
 
 		if (connections == 2) {
 			game.instantiatePlayers ();
-			game.instantiateEnemies();
-			sendEnemies();
+			game.createEnemies ();
+			game.instantiateEnemies ();
+			sendEnemies ();
+		} else {
+			game.destroyEnemies();
+			//game.destroyPlayers();
 		}
 		networkView.RPC ("connectedToServer", RPCMode.All, player, connections);
 
@@ -131,8 +135,10 @@ public class Server : MonoBehaviour{
 	public void removePlayer(NetworkPlayer player){
 		if (player1 == player) {
 			net1 = null;
+			game.destroyPlayer(1);
 		} else if (player2 == player){
 			net2 = null;
+			game.destroyPlayer(2);
 		}else
 			Debug.LogError ("Couldn't Remove Player from server");
 

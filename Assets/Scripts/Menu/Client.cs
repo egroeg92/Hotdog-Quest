@@ -75,7 +75,6 @@ public class Client : MonoBehaviour{
 
 	[RPC]
 	public void receivePlayerUpdate(Vector3 p1Pos, Vector3 p2Pos){
-		Debug.Log (p1Pos + " " + p2Pos);
 		game.updateOtherPlayer (1, p1Pos);
 		game.updateOtherPlayer (2, p2Pos);
 

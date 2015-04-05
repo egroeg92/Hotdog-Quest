@@ -12,32 +12,52 @@ public class Menu : MonoBehaviour {
 	public Client client;
 
 
+    public string typeName = "HotdogQuest";
+    public string gameName = "Room Name";
 	public string IP = "127.0.0.1";
 	public int Port = 25001;
 
+    private HostData[] hostlist; 
+
 	void Start(){
 		IP = GetIP ();
-		Debug.Log (IP);
 		game = GetComponent<GameController> ();
 	}
+    void OnMasterServerEvent(MasterServerEvent msEvent)
+    {
+        if (msEvent == MasterServerEvent.HostListReceived)
+            hostlist = MasterServer.PollHostList();
 
+    }
 	void OnGUI(){
 
 		if (Network.peerType == NetworkPeerType.Disconnected) {
 
-			IP = GUI.TextField(new Rect (100, 75, 100, 25), IP);
+			//IP = GUI.TextField(new Rect (100, 75, 100, 25), IP);
+            if (GUI.Button(new Rect(50, 50, 150, 50), "Refresh Game List"))
+            {
+                MasterServer.RequestHostList(typeName);
+            }
+            if (hostlist != null)
+            {
+                for (int i = 0; i < hostlist.Length; i++)
+                {
+                    if (GUI.Button(new Rect(200, 50 + (50 * i), 150, 50), "join " + hostlist[i].gameName))
+                    {
+                        Network.Connect(hostlist[i]);
+                        game.gameObject.AddComponent<Client>();
+                        game.client = game.GetComponent<Client>();
+                        game.client.game = game;
+                        game.client.networkView = networkView;
 
-			if (GUI.Button (new Rect (100, 100, 100, 25), "Start Client")) {
-				Network.Connect (IP, Port);
-				game.gameObject.AddComponent<Client>();
-				game.client = game.GetComponent<Client>();
-				game.client.game = game;
-				game.client.networkView = networkView;
 
-
-			}
-			if (GUI.Button (new Rect (100, 125, 100, 25), "Start Server")) {
-				Network.InitializeServer (2, Port);
+                    }
+                }
+            }
+			if (GUI.Button (new Rect (50, 100, 150, 50), "Start Server")) {
+				Network.InitializeServer (2, Port,!Network.HavePublicAddress());
+                gameName = IP;
+                MasterServer.RegisterHost(typeName, gameName);
 
 				
 				game.gameObject.AddComponent<Server>();
@@ -49,13 +69,8 @@ public class Menu : MonoBehaviour {
 			}
 		} else {
 			if (Network.peerType == NetworkPeerType.Client) {
-				GUI.Label (new Rect (100, 100, 100, 25), "Client");
-
-				if (GUI.Button (new Rect (100, 125, 100, 25), "Logout")) {
-
-					game.client.destroy();
-
-
+				if (GUI.Button (new Rect (50, 50, 150, 50), "Logout Client")) {
+                    game.client.destroy();
 				}
 
 
@@ -63,17 +78,26 @@ public class Menu : MonoBehaviour {
 			}
 			if (Network.peerType == NetworkPeerType.Server){
 
-				GUI.Label(new Rect(100,100,100,25), "Server");
-				GUI.Label(new Rect(100,125,100,25), "Connections : " + Network.connections.Length);
-				//GUI.Label(new Rect(100,150,100,25), "List Connections : "+ game.server.players.Count);
-
-				if(GUI.Button(new Rect(100,175,100,25),"Logout")){
-
+                //GUI.Label(new Rect(100, 100, 100, 25), "Server");
+				GUI.Label(new Rect(200,50,150,50), "Connections : " + Network.connections.Length);
+				if(GUI.Button(new Rect(50,50,150,50),"Logout Server")){
 					game.server.destroy();
-
-
 				}
-
+                if (Network.connections.Length == 2)
+                {
+                    if (GUI.Button(new Rect(50, 100, 150, 50), "Camera to Player 1"))
+                    {
+                        game.setCamera(1);
+                    }
+                    if (GUI.Button(new Rect(50, 150, 150, 50), "Camera to Player 2"))
+                    {
+                        game.setCamera(2);
+                    }
+                    if (GUI.Button(new Rect(50, 200, 150, 50), "Camera to an Enemy"))
+                    {
+                        game.setCamera(3);
+                    }
+                }
 
 			}
 		}
