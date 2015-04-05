@@ -22,6 +22,27 @@ public class mapGen : MonoBehaviour {
 		plane.transform.localScale = new Vector3(dim/10, 1, dim/10);
 		plane.tag = "city";
 
+		GameObject w = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+		GameObject e = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+		GameObject n = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+		GameObject s = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+
+		n.transform.position = new Vector3 (0, 1, plane.renderer.bounds.max.z);
+		s.transform.position = new Vector3 (0, 1, plane.renderer.bounds.min.z);
+		e.transform.position = new Vector3 (plane.renderer.bounds.max.x, 1, 0);
+		w.transform.position = new Vector3 (plane.renderer.bounds.min.x, 1, 0);
+
+		n.transform.localScale = new Vector3 (plane.renderer.bounds.max.x - plane.renderer.bounds.min.x, 3, .1f);
+		s.transform.localScale = new Vector3 (plane.renderer.bounds.max.x - plane.renderer.bounds.min.x, 3, .1f);
+		e.transform.localScale = new Vector3 (.1f, 3, plane.renderer.bounds.max.z - plane.renderer.bounds.min.z);
+		w.transform.localScale = new Vector3 (.1f, 3, plane.renderer.bounds.max.z - plane.renderer.bounds.min.z);
+
+		n.tag = "city";
+		s.tag = "city";
+		e.tag = "city";
+		w.tag = "city";
+
+
 		Vector3 p00 = plane.renderer.bounds.min;
 		Vector3 p10 = new Vector3(plane.renderer.bounds.max.x , 0 , plane.renderer.bounds.min.z);
 		Vector3 p01 = new Vector3(plane.renderer.bounds.min.x, 0, plane.renderer.bounds.max.z);
@@ -116,8 +137,8 @@ public class mapGen : MonoBehaviour {
 
 	}
 	void Update(){
-		//foreach (Vector3[] l in lines)
-		//	Debug.DrawLine (l [0], l [1], Color.red);
+		foreach (Vector3[] l in lines)
+			Debug.DrawLine (l [0], l [1], Color.red);
 	}
 
 }

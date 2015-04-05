@@ -9,6 +9,7 @@ public class Server : MonoBehaviour{
 
 	public GameController game;
 	public NetworkView networkView;
+	public int enemyAmount = 3;
 
 	//public Hashtable players;
 	NetworkPlayer player1 ;
@@ -19,16 +20,23 @@ public class Server : MonoBehaviour{
 
 
 
+
 	void Start(){
 		Debug.Log ("server started");
+		game.enemyAmount = enemyAmount;
 		game.createMap ();
+		game.createEnemies ();
+		//game.instantiateEnemies ();
+
 	}
 
 	int connections = 0;
 
 	public void destroy(){
 		game.server = null;
+		game.destroyPlayers ();
 		game.destroyCity ();
+		game.destroyEnemies ();
 		Network.Disconnect(250);
 		Destroy (this);
 	}
@@ -37,8 +45,11 @@ public class Server : MonoBehaviour{
 
 	}
 	void LateUpdate(){
-		if(connections == 2)
-			sendClientUpdates ();
+		if (connections == 2) {
+			sendPlayerUpdates ();
+			sendEnemyUpdates();
+
+		}
 	}
 
 	void OnPlayerConnected(NetworkPlayer player){
@@ -56,14 +67,23 @@ public class Server : MonoBehaviour{
 
 		sendMap (player);
 
-		if (connections == 2)
+		if (connections == 2) {
 			game.instantiatePlayers ();
-
+			game.instantiateEnemies();
+			sendEnemies();
+		}
 		networkView.RPC ("connectedToServer", RPCMode.All, player, connections);
 
 	}
-
-
+	[RPC]
+	void sendEnemies(){
+		foreach (DictionaryEntry d in game.enemies) {
+			networkView.RPC ("receiveEnemies", RPCMode.All, (int)d.Key ,((enemy1)d.Value).transform.position, enemyAmount);
+		}
+	}
+	[RPC]
+	void receiveEnemies ( int key, Vector3 enPos, int enemyAmount){
+	}
 	[RPC]
 	void sendMap(NetworkPlayer p){
 		Debug.Log ("sending map...");
@@ -78,15 +98,19 @@ public class Server : MonoBehaviour{
 
 			
 	}
-	[RPC]
-	void receiveMap(NetworkPlayer p, Vector3 sizes, Vector3 pos, Vector3 plane, int count, int size){
-		
-	}
-	[RPC]
-	void sendClientUpdates(){
-		networkView.RPC ("receiveUpdate", RPCMode.All, game.Player1.transform.position, game.Player2.transform.position);
-	}
 
+	[RPC]
+	void sendPlayerUpdates(){
+		Debug.Log ("send Player updates");
+		networkView.RPC ("receivePlayerUpdate", RPCMode.All, game.Player1.transform.position, game.Player2.transform.position);
+	}
+	[RPC]
+	void sendEnemyUpdates(){
+		foreach (DictionaryEntry d in game.getEnemies()) {
+			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((enemy1)d.Value).transform.position);
+		}
+
+	}
 	[RPC]
 	void updatePlayerPosition(Vector3 position, NetworkPlayer player){
 		if (player == player1) {
@@ -100,10 +124,7 @@ public class Server : MonoBehaviour{
 
 	}
 
-	[RPC]
-	public void connectedToServer(NetworkPlayer player, int connections){
-	
-	}
+
 	[RPC]
 	public void removePlayer(NetworkPlayer player){
 		if (player1 == player) {
@@ -119,10 +140,12 @@ public class Server : MonoBehaviour{
 
 	
 	[RPC]
-	public void receiveUpdate(Vector3 pos1, Vector3 pos2){
-
-	}
-
-
+	void receivePlayerUpdate(Vector3 pos1, Vector3 pos2){}
+	[RPC]
+	void receiveEnemyUpdate(int key, Vector3 pos){}
+	[RPC]
+	void connectedToServer(NetworkPlayer player, int connections){}
+	[RPC]
+	void receiveMap(NetworkPlayer p, Vector3 sizes, Vector3 pos, Vector3 plane, int count, int size){}
 
 }

@@ -9,13 +9,18 @@ public class Client : MonoBehaviour{
 	public GameController game;
 	public NetworkView networkView;
 	public NetworkViewID viewID;
+
 	bool connected = false;
+	Hashtable enemyPos = new Hashtable();
 
 	public void destroy(){
 
 		removePlayer (Network.player);
 		game.client = null;
+		game.destroyPlayers ();
 		game.destroyCity ();
+		game.destroyEnemies ();
+		game.enoughEnemies = false;
 		Network.Disconnect (250);
 		Destroy (this);
 	
@@ -32,13 +37,25 @@ public class Client : MonoBehaviour{
 
 		game.addPosition (pos);
 		game.addSize (sizes);
+		game.enemyAmount = 0;
 
 		if(count == size -1)
 			game.createCity(plane);
 
 
 	}
+	[RPC]
+	void sendEnemies(){}
 
+	[RPC]
+	void receiveEnemies (int key, Vector3 enPos, int count){
+		enemyPos.Add (key, enPos);
+
+		if (enemyPos.Count == count) {
+			game.enoughEnemies = true;
+			game.createEnemies(enemyPos);
+		}
+	}
 	[RPC]
 	void updatePlayerPosition(Vector3 position, NetworkPlayer player){
 		networkView.RPC ("updatePlayerPosition", RPCMode.Server, position, Network.player);
@@ -51,17 +68,21 @@ public class Client : MonoBehaviour{
 		
 	[RPC]
 	public void connectedToServer(NetworkPlayer player, int connections){
-		Debug.Log (Network.player == player);
 		if (Network.player == player) {
 			game.setPlayer(connections);
 		}
 	}
 
 	[RPC]
-	public void receiveUpdate(Vector3 p1Pos, Vector3 p2Pos){
+	public void receivePlayerUpdate(Vector3 p1Pos, Vector3 p2Pos){
+		Debug.Log (p1Pos + " " + p2Pos);
 		game.updateOtherPlayer (1, p1Pos);
 		game.updateOtherPlayer (2, p2Pos);
 
+	}
+	[RPC]
+	void receiveEnemyUpdate(int key, Vector3 pos){
+		game.updateEnemy (key, pos);
 	}
 
 

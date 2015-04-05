@@ -28,7 +28,6 @@ public class Menu : MonoBehaviour {
 			IP = GUI.TextField(new Rect (100, 75, 100, 25), IP);
 
 			if (GUI.Button (new Rect (100, 100, 100, 25), "Start Client")) {
-				Debug.Log (IP);
 				Network.Connect (IP, Port);
 				game.gameObject.AddComponent<Client>();
 				game.client = game.GetComponent<Client>();
@@ -39,6 +38,7 @@ public class Menu : MonoBehaviour {
 			}
 			if (GUI.Button (new Rect (100, 125, 100, 25), "Start Server")) {
 				Network.InitializeServer (2, Port);
+
 				
 				game.gameObject.AddComponent<Server>();
 				game.server = game.GetComponent<Server>();
@@ -62,6 +62,7 @@ public class Menu : MonoBehaviour {
 
 			}
 			if (Network.peerType == NetworkPeerType.Server){
+
 				GUI.Label(new Rect(100,100,100,25), "Server");
 				GUI.Label(new Rect(100,125,100,25), "Connections : " + Network.connections.Length);
 				//GUI.Label(new Rect(100,150,100,25), "List Connections : "+ game.server.players.Count);

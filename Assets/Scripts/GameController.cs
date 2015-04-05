@@ -12,6 +12,12 @@ public class GameController : MonoBehaviour {
 	public Client client;
 	public Server server;
 
+	public int enemyAmount;
+	public Hashtable enemies;
+	public enemy1 enemy;
+	public float enemySpeed;
+	public bool enoughEnemies = false;
+
 	int playerId = -1;
 
 	NetworkPeerType peerType;
@@ -22,18 +28,47 @@ public class GameController : MonoBehaviour {
 	ArrayList buildingSize = new ArrayList();
 
 
-	// Use this for initialization
+	/*
+	 * Initialization + setters
+	 */
 	void Start () {
-		//Player1 = GameObject.Find ("Player1").GetComponent<Player>() ;
-		//Player2 = GameObject.Find ("Player2").GetComponent<Player>();
-
+		enemies = new Hashtable ();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		if(client != null && thisPlayer != null)
-			client.updatePosition (thisPlayer.transform.position);
-
+	public void createEnemies(){
+		for (int i = 0; i< enemyAmount; i++) {
+			enemy = Instantiate(enemy, getValidPosition(), Quaternion.identity) as enemy1;
+			enemy.id = i;
+			enemies.Add(i,enemy);
+		}
+	}
+	
+	public void createEnemies(Hashtable positions){
+		Debug.Log ("Create Enemies");
+		foreach(DictionaryEntry d in positions){
+			enemy = Instantiate(enemy, (Vector3)d.Value, Quaternion.identity) as enemy1;
+			enemy.id = (int)d.Key;
+			enemies.Add(enemy.id,enemy);
+		}
+	}
+	public void instantiateEnemies(){
+		foreach (DictionaryEntry e in enemies) {
+			((enemy1)e.Value).gameObject.AddComponent<enemyMovement1>();
+			((enemy1)e.Value).GetComponent<enemyMovement1>().velocity = new Vector3 (Random.Range (0.0f, 100.0f), 0, Random.Range (0.0f, 100.0f));
+			((enemy1)e.Value).GetComponent<enemyMovement1>().speed = enemySpeed;
+		}
+	}
+	public void createMap(){
+		mapGenerator = Instantiate (mapGenerator) as mapGen;
+		
+	}
+	
+	public void addPosition(Vector3 p){
+		buildingPos.Add (p);
+	}
+	
+	public void addSize(Vector3 s){
+		buildingSize.Add (s);
 	}
 
 	public void setPlayer(int player){
@@ -70,6 +105,15 @@ public class GameController : MonoBehaviour {
 
 	}
 
+	/*
+	 *  UPDATES
+	 */
+	void Update () {
+		if (client != null && thisPlayer != null) {
+			client.updatePosition (thisPlayer.transform.position);
+		}
+	}
+
 	public void updatePlayer(int id, Vector3 position){
 		if (id == 1) {
 			Player1.transform.position = position;
@@ -79,16 +123,28 @@ public class GameController : MonoBehaviour {
 
 	}
 	public void updateOtherPlayer(int id, Vector3 position){
-
+		Debug.Log (id);
 		if (id != playerId) {
 			otherPlayer.transform.position = position;
 		} 
 		
 	}
+	public void updateEnemy(int key, Vector3 position){
+		if (enoughEnemies) {
+			((enemy1)enemies [key]).transform.position = position;
+		}
+	}
 
-	public void createMap(){
-		mapGenerator = Instantiate (mapGenerator) as mapGen;
+	/*
+	 * GETTERS
+	*/
+	public Hashtable getEnemies(){
+		return enemies;
+	}
 
+
+	public Vector3 getPlayerPosition(){
+		return thisPlayer.transform.position;
 	}
 	public mapGen getMap(){
 		return mapGenerator;
@@ -98,6 +154,26 @@ public class GameController : MonoBehaviour {
 		GameObject p = GameObject.CreatePrimitive(PrimitiveType.Plane);
 		p.transform.localScale = plane;
 		p.tag = "city";
+		GameObject w = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+		GameObject e = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+		GameObject n = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+		GameObject s = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+
+		n.transform.position = new Vector3 (0, 1, p.renderer.bounds.max.z);
+		s.transform.position = new Vector3 (0, 1, p.renderer.bounds.min.z);
+		e.transform.position = new Vector3 (p.renderer.bounds.max.x, 1, 0);
+		w.transform.position = new Vector3 (p.renderer.bounds.min.x, 1, 0);
+		
+		n.transform.localScale = new Vector3 (p.renderer.bounds.max.x - p.renderer.bounds.min.x, 3, .1f);
+		s.transform.localScale = new Vector3 (p.renderer.bounds.max.x - p.renderer.bounds.min.x, 3, .1f);
+		e.transform.localScale = new Vector3 (.1f, 3, p.renderer.bounds.max.z - p.renderer.bounds.min.z);
+		w.transform.localScale = new Vector3 (.1f, 3, p.renderer.bounds.max.z - p.renderer.bounds.min.z);
+		
+		n.tag = "city";
+		s.tag = "city";
+		e.tag = "city";
+		w.tag = "city";
+
 		GameObject b;
 		for (int i = 0; i< buildingSize.Count; i++) {
 			b = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -107,14 +183,13 @@ public class GameController : MonoBehaviour {
 		}
 
 	}
-	public void addPosition(Vector3 p){
-		buildingPos.Add (p);
-	}
-	
-	public void addSize(Vector3 s){
-		buildingSize.Add (s);
-	}
 
+
+
+	/*
+	 *  Destroyers
+	 * 
+	 */ 
 	public void destroyCity(){
 		buildingPos.Clear();
 		buildingSize.Clear();
@@ -125,6 +200,25 @@ public class GameController : MonoBehaviour {
 
 		Destroy (thisPlayer);
 		Destroy (otherPlayer);
+	}
+
+	public void destroyPlayers(){
+		Destroy (Player1.gameObject);
+		Destroy (Player2.gameObject);
+	}
+
+	public void destroyEnemies(){
+		foreach (DictionaryEntry e in enemies) {
+			Destroy (((enemy1)e.Value).gameObject);
+		}
+		enemies.Clear ();
+	}
+
+	/*
+	 * Helpers
+	 */
+	Vector3 getValidPosition(){
+		return Vector3.zero;
 	}
 
 
