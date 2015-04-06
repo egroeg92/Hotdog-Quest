@@ -5,15 +5,30 @@ public class Player : MonoBehaviour {
 
 	GameController game;
 
+
+	public Vector3 velocity;
+	public Vector3 lastPosition, lastlastPosition;
+
+
+
 	// Use this for initialization
 	void Start () {
 		game = GameObject.Find ("GameController").GetComponent<GameController> ();
 		//disablePlayerControls ();
+		lastPosition = transform.position;
+		lastlastPosition = transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+
+	}
+	void LateUpdate(){
+		if (Time.frameCount % game.positionUpdateframeRate == 0) {
+			lastlastPosition = lastPosition;
+			lastPosition = transform.position;
+		}
+
 	}
 
 	public void disablePlayerControls(){

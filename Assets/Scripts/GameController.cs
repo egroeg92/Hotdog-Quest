@@ -14,11 +14,17 @@ public class GameController : MonoBehaviour {
 
 	public int enemyAmount;
 	public Hashtable enemies;
+	public Hashtable enemyPositions;
 	public enemy1 enemy;
 	public float enemySpeed;
 	public bool enoughEnemies = false;
 	public Camera mainCamera;
 
+
+	public float playerPositionDifferenceThreshold = .1f;
+	public int positionUpdateframeRate = 5;
+
+	GameObject plane;
 
 	int playerId = -1;
 
@@ -138,8 +144,9 @@ public class GameController : MonoBehaviour {
         {
             if (enemies.Count != 0)
             {
-                mainCamera.transform.position = ((enemy1)enemies[Random.Range(0, enemies.Count)]).transform.position + new Vector3(0, 20, 0);
-                mainCamera.transform.parent = ((enemy1)enemies[Random.Range(0, enemies.Count)]).transform;
+				enemy1 e =  ((enemy1)enemies[Random.Range(0, enemies.Count)]);
+                mainCamera.transform.position = e.transform.position + new Vector3(0, 20, 0);
+                mainCamera.transform.parent = e.transform;
             }
         }
 
@@ -150,9 +157,27 @@ public class GameController : MonoBehaviour {
 	 */
 	void Update () {
 		if (client != null && thisPlayer != null) {
-			client.updatePosition (thisPlayer.transform.position);
+
+			if(Time.frameCount % positionUpdateframeRate == 0){
+				Vector3 deadReckoningPosition = deadReckoningPlayer(thisPlayer);
+				//Debug.Log(Vector3.Distance(deadReckoningPosition, thisPlayer.transform.position));
+
+				if(Vector3.Distance(deadReckoningPosition, thisPlayer.transform.position) > playerPositionDifferenceThreshold){
+					Debug.Log ("send position update");
+					client.updatePosition (thisPlayer.transform.position);
+				}
+
+			}
+			else if(otherPlayer != null){
+				otherPlayer.transform.position = deadReckoningPlayer(otherPlayer);
+			}
+
+
 		}
+
+
 	}
+
 
 	public void updatePlayer(int id, Vector3 position){
 
@@ -166,9 +191,11 @@ public class GameController : MonoBehaviour {
 
 	}
 	public void updateOtherPlayer(int id, Vector3 position){
-		if (id != playerId) {
-			otherPlayer.transform.position = position;
-		} 
+		if(otherPlayer!= null){
+			if (id != playerId) {
+				otherPlayer.transform.position = position;
+			} 
+		}
 		
 	}
 	public void updateEnemy(int key, Vector3 position){
@@ -193,23 +220,23 @@ public class GameController : MonoBehaviour {
 	}
 	public void createCity(Vector3 plane){
 		Debug.Log ("map gen");
-		GameObject p = GameObject.CreatePrimitive(PrimitiveType.Plane);
-		p.transform.localScale = plane;
-		p.tag = "city";
+		this.plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
+		this.plane.transform.localScale = plane;
+		this.plane.tag = "city";
 		GameObject w = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
 		GameObject e = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
 		GameObject n = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
 		GameObject s = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
 
-		n.transform.position = new Vector3 (0, 1, p.renderer.bounds.max.z);
-		s.transform.position = new Vector3 (0, 1, p.renderer.bounds.min.z);
-		e.transform.position = new Vector3 (p.renderer.bounds.max.x, 1, 0);
-		w.transform.position = new Vector3 (p.renderer.bounds.min.x, 1, 0);
+		n.transform.position = new Vector3 (0, 1, this.plane.renderer.bounds.max.z);
+		s.transform.position = new Vector3 (0, 1, this.plane.renderer.bounds.min.z);
+		e.transform.position = new Vector3 (this.plane.renderer.bounds.max.x, 1, 0);
+		w.transform.position = new Vector3 (this.plane.renderer.bounds.min.x, 1, 0);
 		
-		n.transform.localScale = new Vector3 (p.renderer.bounds.max.x - p.renderer.bounds.min.x, 3, .1f);
-		s.transform.localScale = new Vector3 (p.renderer.bounds.max.x - p.renderer.bounds.min.x, 3, .1f);
-		e.transform.localScale = new Vector3 (.1f, 3, p.renderer.bounds.max.z - p.renderer.bounds.min.z);
-		w.transform.localScale = new Vector3 (.1f, 3, p.renderer.bounds.max.z - p.renderer.bounds.min.z);
+		n.transform.localScale = new Vector3 (this.plane.renderer.bounds.max.x - this.plane.renderer.bounds.min.x, 3, .1f);
+		s.transform.localScale = new Vector3 (this.plane.renderer.bounds.max.x - this.plane.renderer.bounds.min.x, 3, .1f);
+		e.transform.localScale = new Vector3 (.1f, 3, this.plane.renderer.bounds.max.z - this.plane.renderer.bounds.min.z);
+		w.transform.localScale = new Vector3 (.1f, 3, this.plane.renderer.bounds.max.z - this.plane.renderer.bounds.min.z);
 		
 		n.tag = "city";
 		s.tag = "city";
@@ -253,6 +280,7 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void destroyPlayer(int player){
+		mainCamera.transform.parent = null;
 		if (player == 1) {
 			if (Player1 != null) {
 				Destroy (Player1.gameObject);
@@ -267,9 +295,10 @@ public class GameController : MonoBehaviour {
 	}
 
 	public void destroyEnemies(){
-        Debug.Log(enemies.Count);
-		foreach (DictionaryEntry e in enemies) {
-			Destroy (((enemy1)e.Value).gameObject);
+		if (enemies.Count > 0) {
+			foreach (DictionaryEntry e in enemies) {
+				Destroy (((enemy1)e.Value).gameObject);
+			}
 		}
 		enemies.Clear ();
 	}
@@ -278,7 +307,44 @@ public class GameController : MonoBehaviour {
 	 * Helpers
 	 */
 	Vector3 getValidPosition(){
-		return Vector3.zero;
+		if (plane == null) {
+			plane = mapGenerator.plane;
+		}
+		int corner = Random.Range (0, 4);
+		switch (corner) {
+		case(0):
+			return new Vector3(this.plane.renderer.bounds.max.x , 1, this.plane.renderer.bounds.max.z);
+			break;
+		case(1):
+			return new Vector3(this.plane.renderer.bounds.max.x , 1, this.plane.renderer.bounds.min.z);
+			break;
+		case(2):
+			return new Vector3(this.plane.renderer.bounds.min.x , 1, this.plane.renderer.bounds.min.z);
+			break;
+		case(3):
+			return new Vector3(this.plane.renderer.bounds.min.x , 1, this.plane.renderer.bounds.max.z);
+			break;
+		default:
+			return Vector3.zero;
+			break;
+		}
+
+	}
+
+	Vector3 deadReckoningPlayer(Player player){
+		Vector3 newPos = player.transform.position;
+
+
+		float dist = Vector3.Distance(player.lastlastPosition ,player.lastPosition);
+		Vector3 dir = (player.lastPosition - player.lastlastPosition).normalized;
+
+		Vector3 deadReckoning = player.lastPosition + (dir * dist);
+
+
+		return deadReckoning;
+
+
+
 	}
 
 

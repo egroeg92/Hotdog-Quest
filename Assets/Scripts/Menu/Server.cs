@@ -11,6 +11,8 @@ public class Server : MonoBehaviour{
 	public NetworkView networkView;
 	public int enemyAmount = 3;
 
+	public int latency = 0;
+
 
 	//public Hashtable players;
 	NetworkPlayer player1 ;
