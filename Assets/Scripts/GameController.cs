@@ -64,7 +64,7 @@ public class GameController : MonoBehaviour {
 	public void instantiateEnemies(){
 		foreach (DictionaryEntry e in enemies) {
 			Enemy en = (Enemy) e.Value;
-			Vector3 velocity = new Vector3 (Random.Range (0.0f, 3.0f), 0, Random.Range (0.0f, 3.0f));
+			Vector3 velocity = new Vector3 (Random.Range (0.0f, enemySpeed), 0, Random.Range (0.0f, enemySpeed));
 			en.velocity = velocity;
 			en.setMaxVelocity(enemySpeed);
 		}
@@ -311,6 +311,23 @@ public class GameController : MonoBehaviour {
 		if (plane == null) {
 			plane = mapGenerator.plane;
 		}
+
+		// check for an empty position
+		while (true) {
+			float posx = Random.Range(this.plane.renderer.bounds.min.x, this.plane.renderer.bounds.max.x);
+			float posz = Random.Range(this.plane.renderer.bounds.min.z, this.plane.renderer.bounds.max.z);
+			Vector3 pos = new Vector3(posx, 1, posz);
+			float spawn_radius = 0.5f;
+			Collider[] hitColliders = Physics.OverlapSphere(pos, spawn_radius);
+
+			if (hitColliders.Length == 0) {
+				// no collisions. spawn here
+				return pos;
+			}
+			Debug.Log(hitColliders.Length);
+		}
+
+
 		int corner = Random.Range (0, 4);
 		switch (corner) {
 		case(0):

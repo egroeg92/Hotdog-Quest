@@ -8,7 +8,7 @@ public class SteeringManager : MonoBehaviour {
     public float MAX_SEE_AHEAD = 1.0f;
     public float MAX_AVOID_FORCE = 2.0f;
     public float CIRCLE_DISTANCE = 1.0f;
-    public float CIRCLE_RADIUS = 3.0f;
+    public float CIRCLE_RADIUS = 2.0f;
     private float ANGLE_CHANGE = 15;
     private float wanderAngle;
     private Vector3 ahead;
