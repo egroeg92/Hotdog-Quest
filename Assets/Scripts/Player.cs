@@ -5,10 +5,12 @@ public class Player : MonoBehaviour {
 
 	GameController game;
 
-
+	public float speed;
+	public Vector3 pastVelocity;
 	public Vector3 velocity;
 	public Vector3 lastPosition, lastlastPosition;
 
+	bool enabled = false;
 
 
 	// Use this for initialization
@@ -17,42 +19,54 @@ public class Player : MonoBehaviour {
 		//disablePlayerControls ();
 		lastPosition = transform.position;
 		lastlastPosition = transform.position;
+		speed = game.playerSpeed;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-	}
-	void LateUpdate(){
-		if (Time.frameCount % game.positionUpdateframeRate == 0) {
-			lastlastPosition = lastPosition;
-			lastPosition = transform.position;
+		if (enabled) {
+			pastVelocity = velocity;
+			velocity = MoveVector ();
+			velocity = velocity.normalized * speed;
+			transform.position += velocity * Time.deltaTime;
 		}
 
 	}
+	public void updateVelocity(){
+
+		pastVelocity = velocity;
+
+	}
+
+	private Vector3 MoveVector() {
+		//Keybaord controls
+		Vector3 velocity = Vector3.zero;
+		
+		// position += velocity
+		if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
+		{
+			velocity = new Vector3(1,0,0);
+		}
+		if(Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
+		{
+			velocity = new Vector3(-1,0,0);
+		}
+		if(Input.GetKey(KeyCode.DownArrow) || Input.GetKey(KeyCode.S))
+		{
+			velocity = new Vector3(0,0,-1);
+		}
+		if(Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.W))
+		{
+			velocity = new Vector3(0,0,1);
+		}
+		
+		return velocity;
+	}
 
 	public void disablePlayerControls(){
-		CharacterController cc = GetComponent<CharacterController>();
-		//MouseLook ml = GetComponent<MouseLook> ();
-		
-		MonoBehaviour cm = gameObject.GetComponent ("CharacterMotor") as MonoBehaviour;
-		//MonoBehaviour fps = gameObject.GetComponent ("FPSInputController") as MonoBehaviour;
-		
-		//fps.enabled = false;
-		cm.enabled = false;
-		cc.enabled = false;
-		//ml.enabled = false;
+		enabled = false;
 	}
 	public void enablePlayerControls(){
-
-		CharacterController cc = GetComponent<CharacterController>();
-		//MouseLook ml = GetComponent<MouseLook> ();
-		
-		MonoBehaviour cm = gameObject.GetComponent ("CharacterMotor") as MonoBehaviour;
-		//MonoBehaviour fps = gameObject.GetComponent ("FPSInputController") as MonoBehaviour;
-		
-		//fps.enabled = false;
-		cm.enabled = true;
-		cc.enabled = true;
+		enabled = true;
 	}
 }

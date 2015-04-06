@@ -83,6 +83,16 @@ public class Menu : MonoBehaviour {
 				if(GUI.Button(new Rect(50,50,150,50),"Logout Server")){
 					game.server.destroy();
 				}
+				string dead = "Turn DR on";
+				if(game.deadReckoningOn == true)
+					dead = "Turn DR off";
+
+				if(GUI.Button(new Rect(200,100,150,50),dead)){
+					game.deadReckoningOn = !game.deadReckoningOn;
+					game.server.updateDeadReckoning();
+				}
+
+
                 if (Network.connections.Length == 2)
                 {
                     if (GUI.Button(new Rect(50, 100, 150, 50), "Camera to Player 1"))

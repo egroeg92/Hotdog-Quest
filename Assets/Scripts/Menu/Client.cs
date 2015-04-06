@@ -26,8 +26,12 @@ public class Client : MonoBehaviour{
 	
 	}
 
-	public void updatePosition(Vector3 position){
-		updatePlayerPosition (position, Network.player);
+	public void updatePosition(Vector3 position, Vector3 velocity){
+		updatePlayerPosition (position,velocity, Network.player);
+	}
+	[RPC]
+	void updateDeadReckoningClients(bool dr){
+		game.deadReckoningOn = dr;
 	}
 	[RPC]
 	void sendMap(NetworkPlayer p){
@@ -57,8 +61,8 @@ public class Client : MonoBehaviour{
 		}
 	}
 	[RPC]
-	void updatePlayerPosition(Vector3 position, NetworkPlayer player){
-		networkView.RPC ("updatePlayerPosition", RPCMode.Server, position, Network.player);
+	void updatePlayerPosition(Vector3 position,Vector3 velocity, NetworkPlayer player){
+		networkView.RPC ("updatePlayerPosition", RPCMode.Server, position,velocity, Network.player);
 	}
 		
 	[RPC]
@@ -74,9 +78,10 @@ public class Client : MonoBehaviour{
 	}
 
 	[RPC]
-	public void receivePlayerUpdate(Vector3 p1Pos, Vector3 p2Pos){
-		game.updateOtherPlayer (1, p1Pos);
-		game.updateOtherPlayer (2, p2Pos);
+	public void receivePlayerUpdate(NetworkPlayer  player , Vector3 pos,Vector3 vel){
+		if (player == Network.player) {
+			game.updateOtherPlayer (pos, vel);
+		}
 
 	}
 	[RPC]

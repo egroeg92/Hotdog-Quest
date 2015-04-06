@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour {
 	public Player Player1;
 	public Player Player2;
 
-	Player thisPlayer;
+	public Player thisPlayer;
 	Player otherPlayer;
 
 	public Client client;
@@ -16,13 +16,18 @@ public class GameController : MonoBehaviour {
 	public Hashtable enemies;
 	public Hashtable enemyPositions;
 	public enemy1 enemy;
-	public float enemySpeed;
 	public bool enoughEnemies = false;
 	public Camera mainCamera;
 
 
+	public float enemySpeed;
+	public float playerSpeed;
+
 	public float playerPositionDifferenceThreshold = .1f;
 	public int positionUpdateframeRate = 5;
+
+
+	public bool deadReckoningOn = false;
 
 	GameObject plane;
 
@@ -61,7 +66,7 @@ public class GameController : MonoBehaviour {
 			enemies.Add(enemy.id,enemy);
 		}
 	}
-	public void instantiateEnemies(){
+	public void instantiateEnemyMovement(){
 		foreach (DictionaryEntry e in enemies) {
 			((enemy1)e.Value).gameObject.AddComponent<enemyMovement1>();
 			((enemy1)e.Value).GetComponent<enemyMovement1>().velocity = new Vector3 (Random.Range (0.0f, 100.0f), 0, Random.Range (0.0f, 100.0f));
@@ -158,43 +163,67 @@ public class GameController : MonoBehaviour {
 	void Update () {
 		if (client != null && thisPlayer != null) {
 
-			if(Time.frameCount % positionUpdateframeRate == 0){
-				Vector3 deadReckoningPosition = deadReckoningPlayer(thisPlayer);
-				//Debug.Log(Vector3.Distance(deadReckoningPosition, thisPlayer.transform.position));
+			if(deadReckoningOn){
 
-				if(Vector3.Distance(deadReckoningPosition, thisPlayer.transform.position) > playerPositionDifferenceThreshold){
-					Debug.Log ("send position update");
-					client.updatePosition (thisPlayer.transform.position);
+				//if(Time.frameCount % positionUpdateframeRate == 0)
+				//	thisPlayer.updateVelocity();
+
+
+				if(thisPlayer.pastVelocity != thisPlayer.velocity){
+					Debug.Log ("SEND IT "+thisPlayer.velocity);
+
+					client.updatePosition (thisPlayer.transform.position, thisPlayer.velocity);
+
 				}
 
+
+				if(otherPlayer != null){
+
+					otherPlayer.transform.position = deadReckoningPlayer(otherPlayer);
+				}
 			}
-			else if(otherPlayer != null){
-				otherPlayer.transform.position = deadReckoningPlayer(otherPlayer);
+			else{
+
+				client.updatePosition (thisPlayer.transform.position,thisPlayer.velocity);
+
 			}
 
 
 		}
+		if (server != null && deadReckoningOn && Player1 != null && Player2 != null){
+			Player1.transform.position = deadReckoningPlayer(Player1);
+			Player2.transform.position = deadReckoningPlayer(Player2);
+
+		}
+
 
 
 	}
 
 
-	public void updatePlayer(int id, Vector3 position){
+	public void updatePlayer(int id, Vector3 position,Vector3 velocity){
 
 		if (id == 1) {
-			if(Player1 != null)
+			if(Player1 != null){
 				Player1.transform.position = position;
+				Player1.velocity = velocity;
+			}
 		} else if (id == 2)  {
-			if(Player2 != null)
+			if(Player2 != null){
 				Player2.transform.position = position;
+				Player2.velocity = velocity;
+			}	
 		}
 
 	}
-	public void updateOtherPlayer(int id, Vector3 position){
+
+	public void updateOtherPlayer(Vector3 position, Vector3 velocity){
+
 		if(otherPlayer!= null){
-			if (id != playerId) {
-				otherPlayer.transform.position = position;
-			} 
+			Debug.Log ("other player velocity = "+ velocity);
+			otherPlayer.transform.position = position;
+			otherPlayer.velocity = velocity;
+
 		}
 		
 	}
@@ -332,13 +361,15 @@ public class GameController : MonoBehaviour {
 	}
 
 	Vector3 deadReckoningPlayer(Player player){
-		Vector3 newPos = player.transform.position;
 
-
-		float dist = Vector3.Distance(player.lastlastPosition ,player.lastPosition);
-		Vector3 dir = (player.lastPosition - player.lastlastPosition).normalized;
-
-		Vector3 deadReckoning = player.lastPosition + (dir * dist);
+		//float dist = Vector3.Distance(player.lastlastPosition ,player.lastPosition);
+		//Vector3 dir = (player.lastPosition - player.lastlastPosition).normalized;
+		//Vector3 deadReckoning = player.lastPosition + (dir * dist);
+		//Debug.Log ("last pos : "+player.lastPosition);
+		//Debug.Log ("velocity " + player.velocity);
+		//Debug.Log ("rek :" + (player.lastPosition + (player.velocity * Time.deltaTime)));
+		//Debug.Log ("cur pos : " + player.transform.position); 
+		Vector3 deadReckoning = player.transform.position + ((player.velocity * Time.deltaTime));
 
 
 		return deadReckoning;

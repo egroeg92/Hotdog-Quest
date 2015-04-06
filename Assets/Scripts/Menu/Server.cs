@@ -50,7 +50,7 @@ public class Server : MonoBehaviour{
 	}
 	void LateUpdate(){
 		if (connections == 2) {
-			sendPlayerUpdates ();
+
 			sendEnemyUpdates();
 
 		}
@@ -74,7 +74,7 @@ public class Server : MonoBehaviour{
 		if (connections == 2) {
 			game.instantiatePlayers ();
 			game.createEnemies ();
-			game.instantiateEnemies ();
+			game.instantiateEnemyMovement ();
 			sendEnemies ();
 		} else {
 			game.destroyEnemies();
@@ -83,6 +83,11 @@ public class Server : MonoBehaviour{
 		networkView.RPC ("connectedToServer", RPCMode.All, player, connections);
 
 	}
+	[RPC]
+	public void updateDeadReckoning(){
+		networkView.RPC ("updateDeadReckoningClients", RPCMode.All, game.deadReckoningOn);
+	}
+
 	[RPC]
 	void sendEnemies(){
 		foreach (DictionaryEntry d in game.enemies) {
@@ -107,11 +112,7 @@ public class Server : MonoBehaviour{
 			
 	}
 
-	[RPC]
-	void sendPlayerUpdates(){
-		Debug.Log ("send Player updates");
-		networkView.RPC ("receivePlayerUpdate", RPCMode.All, game.Player1.transform.position, game.Player2.transform.position);
-	}
+
 	[RPC]
 	void sendEnemyUpdates(){
 		foreach (DictionaryEntry d in game.getEnemies()) {
@@ -120,18 +121,22 @@ public class Server : MonoBehaviour{
 
 	}
 	[RPC]
-	void updatePlayerPosition(Vector3 position, NetworkPlayer player){
+	void updatePlayerPosition(Vector3 position,Vector3 velocity, NetworkPlayer player){
 		if (player == player1) {
-			game.updatePlayer(1,position);
+			game.updatePlayer(1,position,velocity);
+			if(player2 !=null)
+				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player2, position,  velocity);
+			
 		} else if (player == player2) {
-			game.updatePlayer(2,position);
+			game.updatePlayer(2,position,velocity);
+			if(player1!=null)
+				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player1, position,  velocity);
 		} else {
 			Debug.Log ("trying to update wrong player");
 		}
 
 
 	}
-
 
 	[RPC]
 	public void removePlayer(NetworkPlayer player){
@@ -148,9 +153,10 @@ public class Server : MonoBehaviour{
 		
 	}
 
-	
 	[RPC]
-	void receivePlayerUpdate(Vector3 pos1, Vector3 pos2){}
+	void updateDeadReckoningClients(bool dr){}
+	[RPC]
+	void receivePlayerUpdate(NetworkPlayer toPlayer, Vector3 pos, Vector3 vel){}
 	[RPC]
 	void receiveEnemyUpdate(int key, Vector3 pos){}
 	[RPC]
