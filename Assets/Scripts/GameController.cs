@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour {
 	public int enemyAmount;
 	public Hashtable enemies;
 	public Hashtable enemyPositions;
-	public enemy1 enemy;
+	public Enemy enemy;
 	public float enemySpeed;
 	public bool enoughEnemies = false;
 	public Camera mainCamera;
@@ -43,40 +43,41 @@ public class GameController : MonoBehaviour {
 		enemies = new Hashtable ();
 		mainCamera.orthographic = true;
 	}
-	
+
 	public void createEnemies(){
 		for (int i = 0; i< enemyAmount; i++) {
-			enemy = Instantiate(Resources.Load("Enemy", typeof(enemy1)), getValidPosition(), Quaternion.identity) as enemy1;
+			enemy = Instantiate(Resources.Load("Enemy", typeof(Enemy)), getValidPosition(), Quaternion.identity) as Enemy;
 			enemy.id = i;
 			enemies.Add(i,enemy);
 		}
 	}
-	
+
 	public void createEnemies(Hashtable positions){
 		Debug.Log ("Create Enemies");
 		enemies.Clear ();
 		foreach(DictionaryEntry d in positions){
-			enemy = Instantiate(Resources.Load("Enemy", typeof(enemy1)), (Vector3)d.Value, Quaternion.identity) as enemy1;
+			enemy = Instantiate(Resources.Load("Enemy", typeof(Enemy)), (Vector3)d.Value, Quaternion.identity) as Enemy;
 			enemy.id = (int)d.Key;
 			enemies.Add(enemy.id,enemy);
 		}
 	}
 	public void instantiateEnemies(){
 		foreach (DictionaryEntry e in enemies) {
-			((enemy1)e.Value).gameObject.AddComponent<enemyMovement1>();
-			((enemy1)e.Value).GetComponent<enemyMovement1>().velocity = new Vector3 (Random.Range (0.0f, 100.0f), 0, Random.Range (0.0f, 100.0f));
-			((enemy1)e.Value).GetComponent<enemyMovement1>().speed = enemySpeed;
+			Enemy en = (Enemy) e.Value;
+			Vector3 velocity = new Vector3 (Random.Range (0.0f, 3.0f), 0, Random.Range (0.0f, 3.0f));
+			en.velocity = velocity;
+			en.setMaxVelocity(enemySpeed);
 		}
 	}
 	public void createMap(){
 		mapGenerator = Instantiate (mapGenerator) as mapGen;
-		
+
 	}
-	
+
 	public void addPosition(Vector3 p){
 		buildingPos.Add (p);
 	}
-	
+
 	public void addSize(Vector3 s){
 		buildingSize.Add (s);
 	}
@@ -89,7 +90,7 @@ public class GameController : MonoBehaviour {
 			otherPlayer = Player2;
 			playerId = 1;
 
-		
+
 		} else {
 			Debug.Log("set to player 2");
 			instantiatePlayers();
@@ -102,7 +103,7 @@ public class GameController : MonoBehaviour {
 		mainCamera.transform.parent = thisPlayer.transform;
 
 		Player1.transform.position = new Vector3 (1, 2, 1);
-		
+
 		Player2.transform.position = new Vector3 (3, 2, 1);
 
 
@@ -116,10 +117,10 @@ public class GameController : MonoBehaviour {
         Player1.transform.position = Vector3.zero;
         Player2.transform.position = Vector3.zero;
 
-            
+
 		Player1.renderer.material.color =(Color.blue);
 		Player2.renderer.material.color =(Color.red);
-		
+
 
 	}
     public void setCamera(int player)
@@ -144,7 +145,7 @@ public class GameController : MonoBehaviour {
         {
             if (enemies.Count != 0)
             {
-				enemy1 e =  ((enemy1)enemies[Random.Range(0, enemies.Count)]);
+				Enemy e =  ((Enemy)enemies[Random.Range(0, enemies.Count)]);
                 mainCamera.transform.position = e.transform.position + new Vector3(0, 20, 0);
                 mainCamera.transform.parent = e.transform;
             }
@@ -194,9 +195,9 @@ public class GameController : MonoBehaviour {
 		if(otherPlayer!= null){
 			if (id != playerId) {
 				otherPlayer.transform.position = position;
-			} 
+			}
 		}
-		
+
 	}
 	public void updateEnemy(int key, Vector3 position){
 		if (enoughEnemies) {
@@ -232,12 +233,12 @@ public class GameController : MonoBehaviour {
 		s.transform.position = new Vector3 (0, 1, this.plane.renderer.bounds.min.z);
 		e.transform.position = new Vector3 (this.plane.renderer.bounds.max.x, 1, 0);
 		w.transform.position = new Vector3 (this.plane.renderer.bounds.min.x, 1, 0);
-		
+
 		n.transform.localScale = new Vector3 (this.plane.renderer.bounds.max.x - this.plane.renderer.bounds.min.x, 3, .1f);
 		s.transform.localScale = new Vector3 (this.plane.renderer.bounds.max.x - this.plane.renderer.bounds.min.x, 3, .1f);
 		e.transform.localScale = new Vector3 (.1f, 3, this.plane.renderer.bounds.max.z - this.plane.renderer.bounds.min.z);
 		w.transform.localScale = new Vector3 (.1f, 3, this.plane.renderer.bounds.max.z - this.plane.renderer.bounds.min.z);
-		
+
 		n.tag = "city";
 		s.tag = "city";
 		e.tag = "city";
@@ -258,7 +259,7 @@ public class GameController : MonoBehaviour {
 
 	/*
 	 *  Destroyers
-	 * 
+	 *
 	 */
     public void destroyCity()
     {

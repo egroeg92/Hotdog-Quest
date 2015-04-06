@@ -28,6 +28,10 @@ public class NPC : MonoBehaviour {
 		return this.transform.position;
 	}
 
+	public void setMaxVelocity(float max) {
+		this.MAX_VELOCITY = max;
+	}
+
 	protected Vector3 truncate (Vector3 vector, float max) {
 		float i;
 		i = max / vector.magnitude;

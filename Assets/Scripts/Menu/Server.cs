@@ -86,7 +86,7 @@ public class Server : MonoBehaviour{
 	[RPC]
 	void sendEnemies(){
 		foreach (DictionaryEntry d in game.enemies) {
-			networkView.RPC ("receiveEnemies", RPCMode.All, (int)d.Key ,((enemy1)d.Value).transform.position, enemyAmount);
+			networkView.RPC ("receiveEnemies", RPCMode.All, (int)d.Key ,((Enemy)d.Value).transform.position, enemyAmount);
 		}
 	}
 	[RPC]
@@ -99,12 +99,12 @@ public class Server : MonoBehaviour{
 		ArrayList sizes = game.getMap ().buildingSizes;
 		ArrayList pos = game.getMap ().buildingPositions;
 		Vector3 planeSize = game.getMap ().plane.transform.localScale;
-	
+
 		for (int i = 0; i < sizes.Count; i++) {
 			networkView.RPC ("receiveMap", RPCMode.All, p, sizes[i],pos[i],planeSize, i, sizes.Count);
 		}
 
-			
+
 	}
 
 	[RPC]
@@ -115,7 +115,7 @@ public class Server : MonoBehaviour{
 	[RPC]
 	void sendEnemyUpdates(){
 		foreach (DictionaryEntry d in game.getEnemies()) {
-			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((enemy1)d.Value).transform.position);
+			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((Enemy)d.Value).transform.position);
 		}
 
 	}
@@ -145,10 +145,10 @@ public class Server : MonoBehaviour{
 			Debug.LogError ("Couldn't Remove Player from server");
 
 		connections--;
-		
+
 	}
 
-	
+
 	[RPC]
 	void receivePlayerUpdate(Vector3 pos1, Vector3 pos2){}
 	[RPC]
