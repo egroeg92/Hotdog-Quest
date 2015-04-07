@@ -101,7 +101,7 @@ public class Server : MonoBehaviour{
 	[RPC]
 	void sendEnemies(){
 		foreach (DictionaryEntry d in game.enemies) {
-			networkView.RPC ("receiveEnemies", RPCMode.All, (int)d.Key ,((enemy1)d.Value).transform.position, enemyAmount);
+			networkView.RPC ("receiveEnemies", RPCMode.All, (int)d.Key ,((Enemy)d.Value).transform.position, enemyAmount);
 		}
 	}
 	[RPC]
@@ -114,12 +114,12 @@ public class Server : MonoBehaviour{
 		ArrayList sizes = game.getMap ().buildingSizes;
 		ArrayList pos = game.getMap ().buildingPositions;
 		Vector3 planeSize = game.getMap ().plane.transform.localScale;
-	
+
 		for (int i = 0; i < sizes.Count; i++) {
 			networkView.RPC ("receiveMap", RPCMode.All, p, sizes[i],pos[i],planeSize, i, sizes.Count);
 		}
 
-			
+
 	}
 
 
@@ -127,13 +127,13 @@ public class Server : MonoBehaviour{
 	public void sendEnemyUpdates(){
 		foreach (DictionaryEntry d in game.getEnemies()) {
 			enemyUpdateCountNoDR++;
-			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((enemy1)d.Value).transform.position, ((enemy1)d.Value).velocity);
+			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((Enemy)d.Value).transform.position, ((Enemy)d.Value).velocity);
 		}
 	}
 	[RPC]
 	public void sendEnemyUpdates(int key){
 		enemyUpdateCountDR++;
-		networkView.RPC ("receiveEnemyUpdate", RPCMode.All, key, ((enemy1)game.enemies[key]).transform.position, ((enemy1)game.enemies[key]).velocity);
+		networkView.RPC ("receiveEnemyUpdate", RPCMode.All, key, ((Enemy)game.enemies[key]).transform.position, ((Enemy)game.enemies[key]).velocity);
 
 	}
 	[RPC]
@@ -148,7 +148,7 @@ public class Server : MonoBehaviour{
 			game.updatePlayerServer(1,position,velocity);
 			if(player2 !=null)
 				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player2, position,  velocity);
-			
+
 		} else if (player == player2) {
 			game.updatePlayerServer(2,position,velocity);
 			if(player1!=null)
@@ -172,7 +172,7 @@ public class Server : MonoBehaviour{
 			Debug.LogError ("Couldn't Remove Player from server");
 
 		connections--;
-		
+
 	}
 
 	[RPC]

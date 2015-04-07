@@ -15,7 +15,7 @@ public class GameController : MonoBehaviour {
 	public int enemyAmount;
 	public Hashtable enemies;
 	public Hashtable enemyPositions;
-	public enemy1 enemy;
+	public Enemy enemy;
 	public bool enoughEnemies = false;
 	public Camera mainCamera;
 
@@ -47,42 +47,45 @@ public class GameController : MonoBehaviour {
 		enemies = new Hashtable ();
 		mainCamera.orthographic = true;
 	}
-	
+
 	public void createEnemies(){
 		for (int i = 0; i< enemyAmount; i++) {
-			enemy = Instantiate(Resources.Load("Enemy", typeof(enemy1)), getValidPosition(), Quaternion.identity) as enemy1;
+			enemy = Instantiate(Resources.Load("Enemy", typeof(Enemy)), getValidPosition(), Quaternion.identity) as Enemy;
 			enemy.id = i;
 			enemies.Add(i,enemy);
+			enemy.livesOnServer = false;
 		}
 	}
-	
+
 	public void createEnemies(Hashtable positions){
 		Debug.Log ("Create Enemies");
 		enemies.Clear ();
 		foreach(DictionaryEntry d in positions){
-			enemy = Instantiate(Resources.Load("Enemy", typeof(enemy1)), (Vector3)d.Value, Quaternion.identity) as enemy1;
+			enemy = Instantiate(Resources.Load("Enemy", typeof(Enemy)), (Vector3)d.Value, Quaternion.identity) as Enemy;
 			enemy.id = (int)d.Key;
 			enemies.Add(enemy.id,enemy);
+			enemy.livesOnServer = false;
 		}
 	}
 	public void instantiateEnemyMovement(){
 		foreach (DictionaryEntry e in enemies) {
-			((enemy1)e.Value).gameObject.AddComponent<enemyMovement1>();
-			((enemy1)e.Value).move = ((enemy1)e.Value).GetComponent<enemyMovement1>();
-			((enemy1)e.Value).move.velocity = new Vector3 (Random.Range (0.0f, 100.0f), 0, Random.Range (0.0f, 100.0f));
-			((enemy1)e.Value).move.speed = enemySpeed;
+			Enemy en = (Enemy) e.Value;
+			Vector3 velocity = new Vector3 (Random.Range (0.0f, enemySpeed), 0, Random.Range (0.0f, enemySpeed));
+			en.velocity = velocity;
+			en.setMaxVelocity(enemySpeed);
+			en.livesOnServer = true;
+	}
 
-		}
 	}
 	public void createMap(){
 		mapGenerator = Instantiate (mapGenerator) as mapGen;
-		
+
 	}
-	
+
 	public void addPosition(Vector3 p){
 		buildingPos.Add (p);
 	}
-	
+
 	public void addSize(Vector3 s){
 		buildingSize.Add (s);
 	}
@@ -95,7 +98,7 @@ public class GameController : MonoBehaviour {
 			otherPlayer = Player2;
 			playerId = 1;
 
-		
+
 		} else {
 			Debug.Log("set to player 2");
 			instantiatePlayers();
@@ -108,7 +111,7 @@ public class GameController : MonoBehaviour {
 		mainCamera.transform.parent = thisPlayer.transform;
 
 		Player1.transform.position = new Vector3 (1, 2, 1);
-		
+
 		Player2.transform.position = new Vector3 (3, 2, 1);
 
 
@@ -122,7 +125,7 @@ public class GameController : MonoBehaviour {
         Player1.transform.position = Vector3.zero;
         Player2.transform.position = Vector3.zero;
 
-            
+
 		Player1.renderer.material.color =(Color.blue);
 		Player2.renderer.material.color =(Color.red);
 
@@ -150,7 +153,7 @@ public class GameController : MonoBehaviour {
         {
             if (enemies.Count != 0)
             {
-				enemy1 e =  ((enemy1)enemies[Random.Range(0, enemies.Count)]);
+				Enemy e =  ((Enemy)enemies[Random.Range(0, enemies.Count)]);
                 mainCamera.transform.position = e.transform.position + new Vector3(0, 20, 0);
                 mainCamera.transform.parent = e.transform;
             }
@@ -198,11 +201,11 @@ public class GameController : MonoBehaviour {
 
 		if (client != null) {
 			foreach (DictionaryEntry d in enemies) {
-				((enemy1)enemies [(int)d.Key]).transform.position = deadReckoningEnemy ((enemy1)enemies [(int)d.Key]);
+				((Enemy)enemies [(int)d.Key]).transform.position = deadReckoningEnemy ((Enemy)enemies [(int)d.Key]);
 			}
 		} else if (server != null) {
 			foreach (DictionaryEntry d in enemies) {
-				enemy1 e = (enemy1)d.Value;
+				Enemy e = (Enemy)d.Value;
 				if(e.velocity != e.pastVelocity)
 					server.sendEnemyUpdates((int)d.Key);
 			}
@@ -220,7 +223,7 @@ public class GameController : MonoBehaviour {
 			if(Player2 != null){
 				Player2.transform.position = position;
 				Player2.velocity = velocity;
-			}	
+			}
 		}
 
 	}
@@ -232,12 +235,12 @@ public class GameController : MonoBehaviour {
 			otherPlayer.velocity = velocity;
 
 		}
-		
+
 	}
 	public void updateEnemy(int key, Vector3 position, Vector3 velocity){
 		if (enoughEnemies) {
-			((enemy1)enemies [key]).transform.position = position;
-			((enemy1)enemies [key]).velocity = velocity;
+			((Enemy)enemies [key]).transform.position = position;
+			((Enemy)enemies [key]).velocity = velocity;
 
 		}
 	}
@@ -270,12 +273,12 @@ public class GameController : MonoBehaviour {
 		s.transform.position = new Vector3 (0, 1, this.plane.renderer.bounds.min.z);
 		e.transform.position = new Vector3 (this.plane.renderer.bounds.max.x, 1, 0);
 		w.transform.position = new Vector3 (this.plane.renderer.bounds.min.x, 1, 0);
-		
+
 		n.transform.localScale = new Vector3 (this.plane.renderer.bounds.max.x - this.plane.renderer.bounds.min.x, 3, .1f);
 		s.transform.localScale = new Vector3 (this.plane.renderer.bounds.max.x - this.plane.renderer.bounds.min.x, 3, .1f);
 		e.transform.localScale = new Vector3 (.1f, 3, this.plane.renderer.bounds.max.z - this.plane.renderer.bounds.min.z);
 		w.transform.localScale = new Vector3 (.1f, 3, this.plane.renderer.bounds.max.z - this.plane.renderer.bounds.min.z);
-		
+
 		n.tag = "city";
 		s.tag = "city";
 		e.tag = "city";
@@ -296,7 +299,7 @@ public class GameController : MonoBehaviour {
 
 	/*
 	 *  Destroyers
-	 * 
+	 *
 	 */
     public void destroyCity()
     {
@@ -335,7 +338,7 @@ public class GameController : MonoBehaviour {
 	public void destroyEnemies(){
 		if (enemies.Count > 0) {
 			foreach (DictionaryEntry e in enemies) {
-				Destroy (((enemy1)e.Value).gameObject);
+				Destroy (((Enemy)e.Value).gameObject);
 			}
 		}
 		enemies.Clear ();
@@ -345,28 +348,23 @@ public class GameController : MonoBehaviour {
 	 * Helpers
 	 */
 	Vector3 getValidPosition(){
+		// check for an empty position
 		if (plane == null) {
 			plane = mapGenerator.plane;
 		}
-		int corner = Random.Range (0, 4);
-		switch (corner) {
-		case(0):
-			return new Vector3(this.plane.renderer.bounds.max.x , 1, this.plane.renderer.bounds.max.z);
-			break;
-		case(1):
-			return new Vector3(this.plane.renderer.bounds.max.x , 1, this.plane.renderer.bounds.min.z);
-			break;
-		case(2):
-			return new Vector3(this.plane.renderer.bounds.min.x , 1, this.plane.renderer.bounds.min.z);
-			break;
-		case(3):
-			return new Vector3(this.plane.renderer.bounds.min.x , 1, this.plane.renderer.bounds.max.z);
-			break;
-		default:
-			return Vector3.zero;
-			break;
-		}
 
+		while (true) {
+			float posx = Random.Range(this.plane.renderer.bounds.min.x, this.plane.renderer.bounds.max.x);
+			float posz = Random.Range(this.plane.renderer.bounds.min.z, this.plane.renderer.bounds.max.z);
+			Vector3 pos = new Vector3(posx, 1, posz);
+			float spawn_radius = 0.5f;
+			Collider[] hitColliders = Physics.OverlapSphere(pos, spawn_radius);
+
+			if (hitColliders.Length == 0) {
+				// no collisions. spawn here
+				return pos;
+			}
+		}
 	}
 
 	Vector3 deadReckoningPlayer(Player player){
@@ -374,10 +372,10 @@ public class GameController : MonoBehaviour {
 		return deadReckoning;
 
 	}
-	Vector3 deadReckoningEnemy(enemy1 enemy){
+	Vector3 deadReckoningEnemy(Enemy enemy){
 		Vector3 deadReckoning = enemy.transform.position + ((enemy.velocity * Time.deltaTime));
 		return deadReckoning;
-		
+
 	}
 
 

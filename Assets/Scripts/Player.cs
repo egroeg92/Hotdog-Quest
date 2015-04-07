@@ -1,21 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Player : MonoBehaviour {
+public class Player : NPC {
 
 	GameController game;
 
 	public float speed;
-	public Vector3 pastVelocity;
-	public Vector3 velocity;
 	public Vector3 lastPosition, lastlastPosition;
 
 	public Vector3 shootPoint;
 
 	public cannonBehaviour cannon;
 
-	bool enabled = false;
-
+	public Player(Vector3 position) : base(position){}
 
 	// Use this for initialization
 	void Start () {
@@ -27,10 +24,10 @@ public class Player : MonoBehaviour {
 		lastlastPosition = transform.position;
 		speed = game.playerSpeed;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		if (enabled) {
+		if (this.getOnServer()) {
 			pastVelocity = velocity;
 			velocity = MoveVector ();
 			velocity = velocity.normalized * speed;
@@ -58,7 +55,7 @@ public class Player : MonoBehaviour {
 	private Vector3 MoveVector() {
 		//Keybaord controls
 		Vector3 velocity = Vector3.zero;
-		
+
 		// position += velocity
 		if(Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
 		{
@@ -76,16 +73,16 @@ public class Player : MonoBehaviour {
 		{
 			velocity = new Vector3(0,0,1);
 		}
-		
+
 		return velocity;
 	}
 
 	public void disablePlayerControls(){
-		enabled = false;
+		this.livesOnServer = false;
 		cannon.enabled = false;
 	}
 	public void enablePlayerControls(){
-		enabled = true;
+		this.livesOnServer = true;
 		cannon.enabled = true;
 	}
 }
