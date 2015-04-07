@@ -24,14 +24,13 @@ public class GameController : MonoBehaviour {
 	public float playerSpeed;
 
 	public float playerPositionDifferenceThreshold = .1f;
-	public int positionUpdateframeRate = 5;
-
 
 	public bool deadReckoningOn = false;
 
 	GameObject plane;
 
 	int playerId = -1;
+
 
 	NetworkPeerType peerType;
 
@@ -220,7 +219,7 @@ public class GameController : MonoBehaviour {
 	public void updateOtherPlayer(Vector3 position, Vector3 velocity){
 
 		if(otherPlayer!= null){
-			Debug.Log ("other player velocity = "+ velocity);
+			//Debug.Log ("other player velocity = "+ velocity);
 			otherPlayer.transform.position = position;
 			otherPlayer.velocity = velocity;
 

@@ -11,14 +11,17 @@ public class Server : MonoBehaviour{
 	public NetworkView networkView;
 	public int enemyAmount = 3;
 
-	public int latency = 0;
+	public int playerUpdateCountDR = 0;
+	public int playerUpdateCountNoDR = 0;
+	public float DRTime = 0;
+	public float noDRTime = 0;
 
-
-	//public Hashtable players;
 	NetworkPlayer player1 ;
 	NetworkPlayer player2 ;
 	string net1 = null;
 	string net2 = null;
+
+
 
 
 
@@ -46,7 +49,12 @@ public class Server : MonoBehaviour{
 	}
 
 	void Update(){
+		if(game.deadReckoningOn)
+			DRTime += Time.deltaTime;
+		else
+			noDRTime += Time.deltaTime;
 
+		Debug.Log (noDRTime);
 	}
 	void LateUpdate(){
 		if (connections == 2) {
@@ -122,6 +130,12 @@ public class Server : MonoBehaviour{
 	}
 	[RPC]
 	void updatePlayerPosition(Vector3 position,Vector3 velocity, NetworkPlayer player){
+		if (game.deadReckoningOn)
+			playerUpdateCountDR ++;
+		else
+			playerUpdateCountNoDR++;
+
+
 		if (player == player1) {
 			game.updatePlayer(1,position,velocity);
 			if(player2 !=null)

@@ -78,8 +78,22 @@ public class Menu : MonoBehaviour {
 			}
 			if (Network.peerType == NetworkPeerType.Server){
 
-                //GUI.Label(new Rect(100, 100, 100, 25), "Server");
+				GUI.color = Color.black;
 				GUI.Label(new Rect(200,50,150,50), "Connections : " + Network.connections.Length);
+
+				int DRtotal = game.server.playerUpdateCountDR;
+				int noDRtotal = game.server.playerUpdateCountNoDR;
+				int total = DRtotal + noDRtotal;
+
+				float totalTimeDR= game.server.DRTime;
+				float totalTimeNoDR = game.server.noDRTime;
+				float totalTime = totalTimeNoDR + totalTimeDR;
+
+				GUI.Label(new Rect(200,150,150,50), "Player Updates Total " + DRtotal + " / "+totalTime) ;
+				GUI.Label(new Rect(200,200,150,50), "Player Updates with DR " + DRtotal + " / " +totalTimeDR);
+				GUI.Label(new Rect(200,250,150,50), "Player Updates without DR " + noDRtotal+ " / " + totalTimeNoDR);
+
+				
 				if(GUI.Button(new Rect(50,50,150,50),"Logout Server")){
 					game.server.destroy();
 				}
