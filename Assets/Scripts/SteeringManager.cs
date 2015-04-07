@@ -93,9 +93,6 @@ public class SteeringManager : MonoBehaviour {
 
 		foreach (GameObject o in obstacles) {
 			bool collision = lineIntersectsObstacle(ahead, ahead2, o);
-            if(collision) {
-                Debug.Log("Obstacle ahead");
-            }
             if (collision && (mostThreatening == null
                     || Vector3.Distance(host.getPosition(), o.transform.position) < Vector3.Distance(host.getPosition(), mostThreatening.transform.position))) {
 	            mostThreatening = o;

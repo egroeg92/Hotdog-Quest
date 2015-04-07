@@ -51,7 +51,6 @@ public class Server : MonoBehaviour{
 	}
 
 	void Update(){
-		Debug.Log (enemyUpdateCountDR);
 		if(game.deadReckoningOn)
 			DRTime += Time.deltaTime;
 		else

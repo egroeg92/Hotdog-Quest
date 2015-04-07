@@ -4,6 +4,7 @@ using System.Collections;
 public class Player : NPC {
 
 	GameController game;
+	Bullet bullet;
 
 	public float speed;
 	public Vector3 lastPosition, lastlastPosition;
@@ -32,7 +33,6 @@ public class Player : NPC {
 			velocity = MoveVector ();
 			velocity = velocity.normalized * speed;
 			transform.position += velocity * Time.deltaTime;
-
 			shoot();
 		}
 
@@ -44,12 +44,23 @@ public class Player : NPC {
 
 	}
 
-	private bool shoot(){
+	private void shoot(){
 		if (Input.GetMouseButtonDown(0)){
-
-			return true;
+			// instantiate a bullet prefab
+			Bullet bulletClone;
+			Debug.Log(fireDirection());
+			Vector3 bulletPosition =  getPosition() + fireDirection();
+			bulletClone = Instantiate(Resources.Load("Bullet", typeof(Bullet)), bulletPosition, Quaternion.identity) as Bullet;
+			bulletClone.velocity = fireDirection() * 5;
 		}
-		return false;
+	}
+
+	private Vector3 fireDirection(){
+		Vector3 mousePos = Input.mousePosition;
+		//mousePos.z = -(transform.position.x - Camera.mainCamera.transform.position.x);
+		Vector3 worldPos = Camera.mainCamera.ScreenToWorldPoint (mousePos);
+		worldPos = new Vector3(worldPos.x, transform.position.y, worldPos.z);
+		return (worldPos - transform.position).normalized;
 	}
 
 	private Vector3 MoveVector() {
