@@ -13,6 +13,8 @@ public class Server : MonoBehaviour{
 
 	public int playerUpdateCountDR = 0;
 	public int playerUpdateCountNoDR = 0;
+	public int enemyUpdateCountDR = 0;
+	public int enemyUpdateCountNoDR = 0;
 	public float DRTime = 0;
 	public float noDRTime = 0;
 
@@ -49,19 +51,19 @@ public class Server : MonoBehaviour{
 	}
 
 	void Update(){
+		Debug.Log (enemyUpdateCountDR);
 		if(game.deadReckoningOn)
 			DRTime += Time.deltaTime;
 		else
 			noDRTime += Time.deltaTime;
 
-		Debug.Log (noDRTime);
 	}
 	void LateUpdate(){
-		if (connections == 2) {
+		//if (connections == 2) {
 
-			sendEnemyUpdates();
+			//sendEnemyUpdates();
 
-		}
+		//}
 	}
 
 	void OnPlayerConnected(NetworkPlayer player){
@@ -122,10 +124,16 @@ public class Server : MonoBehaviour{
 
 
 	[RPC]
-	void sendEnemyUpdates(){
+	public void sendEnemyUpdates(){
 		foreach (DictionaryEntry d in game.getEnemies()) {
-			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((enemy1)d.Value).transform.position);
+			enemyUpdateCountNoDR++;
+			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((enemy1)d.Value).transform.position, ((enemy1)d.Value).velocity);
 		}
+	}
+	[RPC]
+	public void sendEnemyUpdates(int key){
+		enemyUpdateCountDR++;
+		networkView.RPC ("receiveEnemyUpdate", RPCMode.All, key, ((enemy1)game.enemies[key]).transform.position, ((enemy1)game.enemies[key]).velocity);
 
 	}
 	[RPC]
@@ -137,12 +145,12 @@ public class Server : MonoBehaviour{
 
 
 		if (player == player1) {
-			game.updatePlayer(1,position,velocity);
+			game.updatePlayerServer(1,position,velocity);
 			if(player2 !=null)
 				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player2, position,  velocity);
 			
 		} else if (player == player2) {
-			game.updatePlayer(2,position,velocity);
+			game.updatePlayerServer(2,position,velocity);
 			if(player1!=null)
 				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player1, position,  velocity);
 		} else {
@@ -172,7 +180,7 @@ public class Server : MonoBehaviour{
 	[RPC]
 	void receivePlayerUpdate(NetworkPlayer toPlayer, Vector3 pos, Vector3 vel){}
 	[RPC]
-	void receiveEnemyUpdate(int key, Vector3 pos){}
+	void receiveEnemyUpdate(int key, Vector3 pos, Vector3 vel){}
 	[RPC]
 	void connectedToServer(NetworkPlayer player, int connections){}
 	[RPC]

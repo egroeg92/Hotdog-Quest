@@ -23,21 +23,25 @@ public class Menu : MonoBehaviour {
 		IP = GetIP ();
 		game = GetComponent<GameController> ();
 	}
-    void OnMasterServerEvent(MasterServerEvent msEvent)
+	void Update(){
+		if (Network.peerType == NetworkPeerType.Disconnected) {
+
+			MasterServer.RequestHostList (typeName);
+		}
+	}
+	void OnMasterServerEvent(MasterServerEvent msEvent)
     {
         if (msEvent == MasterServerEvent.HostListReceived)
             hostlist = MasterServer.PollHostList();
 
     }
+
 	void OnGUI(){
 
 		if (Network.peerType == NetworkPeerType.Disconnected) {
 
 			//IP = GUI.TextField(new Rect (100, 75, 100, 25), IP);
-            if (GUI.Button(new Rect(50, 50, 150, 50), "Refresh Game List"))
-            {
-                MasterServer.RequestHostList(typeName);
-            }
+
             if (hostlist != null)
             {
                 for (int i = 0; i < hostlist.Length; i++)
@@ -54,7 +58,7 @@ public class Menu : MonoBehaviour {
                     }
                 }
             }
-			if (GUI.Button (new Rect (50, 100, 150, 50), "Start Server")) {
+			if (GUI.Button (new Rect (50, 50, 150, 50), "Start Server")) {
 				Network.InitializeServer (2, Port,!Network.HavePublicAddress());
                 gameName = IP;
                 MasterServer.RegisterHost(typeName, gameName);
@@ -79,32 +83,45 @@ public class Menu : MonoBehaviour {
 			if (Network.peerType == NetworkPeerType.Server){
 
 				GUI.color = Color.black;
-				GUI.Label(new Rect(200,50,150,50), "Connections : " + Network.connections.Length);
+
+				string dead = "Turn DR on";
+				if(game.deadReckoningOn == true)
+					dead = "Turn DR off";
+				
+				if(GUI.Button(new Rect(200,50,150,50),dead)){
+					game.deadReckoningOn = !game.deadReckoningOn;
+					game.server.updateDeadReckoning();
+				}
+
+				GUI.Label(new Rect(200,100,150,50), "Connections : " + Network.connections.Length);
 
 				int DRtotal = game.server.playerUpdateCountDR;
 				int noDRtotal = game.server.playerUpdateCountNoDR;
 				int total = DRtotal + noDRtotal;
+				
+				int eDRtotal = game.server.enemyUpdateCountDR;
+				int eNoDRtotal = game.server.enemyUpdateCountNoDR;
+				int eTotal = eDRtotal + eNoDRtotal;
+
 
 				float totalTimeDR= game.server.DRTime;
 				float totalTimeNoDR = game.server.noDRTime;
 				float totalTime = totalTimeNoDR + totalTimeDR;
 
-				GUI.Label(new Rect(200,150,150,50), "Player Updates Total " + DRtotal + " / "+totalTime) ;
-				GUI.Label(new Rect(200,200,150,50), "Player Updates with DR " + DRtotal + " / " +totalTimeDR);
-				GUI.Label(new Rect(200,250,150,50), "Player Updates without DR " + noDRtotal+ " / " + totalTimeNoDR);
+				GUI.Label(new Rect(200,150,250,50), "Player Updates Total " + DRtotal + " / "+totalTime) ;
+				GUI.Label(new Rect(200,200,250,50), "Player Updates with DR " + DRtotal + " / " +totalTimeDR);
+				GUI.Label(new Rect(200,250,250,50), "Player Updates without DR " + noDRtotal+ " / " + totalTimeNoDR);
+
+				GUI.Label(new Rect(200,300,250,50), "Number of Enemies" + game.enemies.Count);
+				GUI.Label(new Rect(200,350,250,50), "Enemy Updates Total " + DRtotal + " / "+totalTime) ;
+				GUI.Label(new Rect(200,400,250,50), "Enemy Updates with DR " + DRtotal + " / " +totalTimeDR);
+				GUI.Label(new Rect(200,450,250,50), "Enemy Updates without DR " + noDRtotal+ " / " + totalTimeNoDR);
 
 				
 				if(GUI.Button(new Rect(50,50,150,50),"Logout Server")){
 					game.server.destroy();
 				}
-				string dead = "Turn DR on";
-				if(game.deadReckoningOn == true)
-					dead = "Turn DR off";
 
-				if(GUI.Button(new Rect(200,100,150,50),dead)){
-					game.deadReckoningOn = !game.deadReckoningOn;
-					game.server.updateDeadReckoning();
-				}
 
 
                 if (Network.connections.Length == 2)

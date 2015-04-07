@@ -4,8 +4,9 @@ using System.Collections;
 public class enemyMovement1 : MonoBehaviour {
 	public float speed;
 	public Vector3 velocity;
+	public Vector3 pastVelocity;
 
-	public float wanderAngle = 30;
+	public float wanderAngle = 0;
 	public float avoidForce = 1;
 
 	ArrayList visiblePlayers;
@@ -14,11 +15,11 @@ public class enemyMovement1 : MonoBehaviour {
 	void Start () {
 		visiblePlayers = new ArrayList ();
 		
-	
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		pastVelocity = velocity;
 		if (canSee ()) {
 			velocity += moveTowards (getClosestPlayer());
 		} else {

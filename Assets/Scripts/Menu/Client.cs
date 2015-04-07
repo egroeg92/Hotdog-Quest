@@ -85,8 +85,8 @@ public class Client : MonoBehaviour{
 
 	}
 	[RPC]
-	void receiveEnemyUpdate(int key, Vector3 pos){
-		game.updateEnemy (key, pos);
+	void receiveEnemyUpdate(int key, Vector3 pos, Vector3 vel){
+		game.updateEnemy (key, pos, vel);
 	}
 
 
