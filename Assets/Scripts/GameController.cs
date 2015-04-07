@@ -125,7 +125,7 @@ public class GameController : MonoBehaviour {
             
 		Player1.renderer.material.color =(Color.blue);
 		Player2.renderer.material.color =(Color.red);
-		
+
 
 	}
     public void setCamera(int player)

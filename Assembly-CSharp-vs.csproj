@@ -57,6 +57,7 @@
      <Compile Include="Assets\Scripts\PlayerCharacter.cs" />
      <Compile Include="Assets\Scripts\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\SteeringManager.cs" />
+     <Compile Include="Assets\Scripts\cannonBehaviour.cs" />
      <Compile Include="Assets\Scripts\enemy1.cs" />
      <Compile Include="Assets\Scripts\enemyMovement1.cs" />
      <Compile Include="Assets\Scripts\mapGen.cs" />

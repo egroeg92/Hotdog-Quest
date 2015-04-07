@@ -10,12 +10,18 @@ public class Player : MonoBehaviour {
 	public Vector3 velocity;
 	public Vector3 lastPosition, lastlastPosition;
 
+	public Vector3 shootPoint;
+
+	public cannonBehaviour cannon;
+
 	bool enabled = false;
 
 
 	// Use this for initialization
 	void Start () {
 		game = GameObject.Find ("GameController").GetComponent<GameController> ();
+		gameObject.rigidbody.freezeRotation = true;
+
 		//disablePlayerControls ();
 		lastPosition = transform.position;
 		lastlastPosition = transform.position;
@@ -29,13 +35,24 @@ public class Player : MonoBehaviour {
 			velocity = MoveVector ();
 			velocity = velocity.normalized * speed;
 			transform.position += velocity * Time.deltaTime;
+
+			shoot();
 		}
 
 	}
+
 	public void updateVelocity(){
 
 		pastVelocity = velocity;
 
+	}
+
+	private bool shoot(){
+		if (Input.GetMouseButtonDown(0)){
+
+			return true;
+		}
+		return false;
 	}
 
 	private Vector3 MoveVector() {
@@ -65,8 +82,10 @@ public class Player : MonoBehaviour {
 
 	public void disablePlayerControls(){
 		enabled = false;
+		cannon.enabled = false;
 	}
 	public void enablePlayerControls(){
 		enabled = true;
+		cannon.enabled = true;
 	}
 }
