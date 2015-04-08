@@ -3,6 +3,7 @@ using System.Collections;
 
 public class NPC : MonoBehaviour {
 
+	public GameController game;
 	public float MAX_VELOCITY;
 	public Vector3 position;
     public Vector3 velocity;
@@ -10,6 +11,9 @@ public class NPC : MonoBehaviour {
     public bool livesOnServer;
 	private int health;
 
+	protected void Start(){
+		game =GameObject.Find ("GameController").GetComponent<GameController> ();
+	}
 	public NPC (Vector3 position) {
 		this.transform.position = position;
 		// steering = new SteeringManager(this);

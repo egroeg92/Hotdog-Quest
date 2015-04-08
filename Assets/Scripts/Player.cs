@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Player : NPC {
 
-	GameController game;
 	Bullet bullet;
 
 	public float speed;
@@ -16,7 +15,7 @@ public class Player : NPC {
 
 	// Use this for initialization
 	void Start () {
-		game = GameObject.Find ("GameController").GetComponent<GameController> ();
+		base.Start ();
 		gameObject.rigidbody.freezeRotation = true;
 
 		//disablePlayerControls ();

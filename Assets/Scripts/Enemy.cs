@@ -16,9 +16,12 @@ public class Enemy : NPC {
 
 	// Use this for initialization
 	void Start () {
+		base.Start ();
+		tag = "enemy";
 		this.steering = new SteeringManager(this);
 		this.seesPlayer = false;
 		this.target = GameObject.FindGameObjectWithTag("Player").transform;
+
 	}
 
 	// Update is called once per frame
@@ -42,5 +45,19 @@ public class Enemy : NPC {
 		if (seesPlayer) {
 			Debug.Log("Player seen.");
 		}
+	}
+
+	public void isShot(){
+		Debug.Log (id + " shot ");
+	}
+	void OnCollisionEnter(Collision col){
+
+		if (col.gameObject.tag == "bullet") {
+			Debug.Log ("hit enemy");
+			game.enemyShot(id, false);
+		}
+
+		Destroy (gameObject);
+
 	}
 }

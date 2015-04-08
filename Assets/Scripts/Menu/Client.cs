@@ -30,6 +30,15 @@ public class Client : MonoBehaviour{
 		updatePlayerPosition (position,velocity, Network.player);
 	}
 	[RPC]
+	public void enemyShotSend(int id){
+		networkView.RPC ("enemyShotServer",RPCMode.Server, id);
+	}
+	[RPC]
+	public void enemyShotRecieve(int id){
+		if (game.enemies [id] != null)
+			game.enemyShot (id, true);
+	}
+	[RPC]
 	public void latencyRecieve(){
 		networkView.RPC ("latencyCheckReceive", RPCMode.Server, Network.player);
 	}
@@ -107,7 +116,8 @@ public class Client : MonoBehaviour{
 		if(Network.player == player)
 			game.updateEnemy (key, pos, vel,latency);
 	}
-
+	[RPC]
+	void enemyShotServer(int id){}
 	[RPC]
 	void createBulletServer(Vector3 pos, Vector3 vel, NetworkPlayer player){}
 	[RPC]

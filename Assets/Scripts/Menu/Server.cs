@@ -118,7 +118,13 @@ public class Server : MonoBehaviour{
 	public void updateDeadReckoning(){
 		networkView.RPC ("updateDeadReckoningClients", RPCMode.All, game.deadReckoningOn);
 	}
+	[RPC]
+	public void enemyShotServer(int id){
+		if (game.enemies [id] != null)
+			game.enemyShot (id, true);
 
+		networkView.RPC ("enemyShotRecieve",RPCMode.All, id);
+	}
 	[RPC]
 	void sendEnemies(){
 		foreach (DictionaryEntry d in game.enemies) {
@@ -206,6 +212,8 @@ public class Server : MonoBehaviour{
 		networkView.RPC ("createBulletClient", RPCMode.All, pos, vel, player, clientToclientLatency);
 
 	}
+	[RPC]
+	void enemyShotRecieve(int id){}
 	[RPC]
 	void latencyRecieve(){}
 	[RPC]

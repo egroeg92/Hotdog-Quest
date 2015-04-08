@@ -186,7 +186,16 @@ public class GameController : MonoBehaviour {
 		}
 
 	}
+	public void enemyShot(int id, bool received){
+		enemies.Remove (id);
 
+		if (client != null && !received)
+			client.enemyShotSend (id);
+		else if (server != null && !received)
+			server.enemyShotServer (id);
+
+
+	}
 	void updatePlayersDeadReckoning(){
 		//Clients
 		if(client != null && thisPlayer != null && otherPlayer != null){

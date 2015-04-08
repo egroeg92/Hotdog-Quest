@@ -73,6 +73,8 @@ public class Menu : MonoBehaviour {
 			}
 		} else {
 			if (Network.peerType == NetworkPeerType.Client) {
+				GUI.Label(new Rect(200,50,250,50), "Number Of Enemies left " + game.enemies.Count);
+
 				if (GUI.Button (new Rect (50, 50, 150, 50), "Logout Client")) {
                     game.client.destroy();
 				}
