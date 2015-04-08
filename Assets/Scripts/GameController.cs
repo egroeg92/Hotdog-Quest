@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour {
 
 	public float enemySpeed;
 	public float playerSpeed;
+	public float bulletSpeed = 5;
 
 	public float playerPositionDifferenceThreshold = .1f;
 
@@ -167,6 +168,8 @@ public class GameController : MonoBehaviour {
 	}
 	public void createBullet(Vector3 pos, Vector3 vel){
 		//create bullet
+		Bullet bulletClone = Instantiate(Resources.Load("Bullet", typeof(Bullet)), pos, Quaternion.identity) as Bullet;
+		bulletClone.velocity = vel;
 	}
 	/*
 	 *  UPDATES

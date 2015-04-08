@@ -50,7 +50,8 @@ public class Player : NPC {
 			Debug.Log(fireDirection());
 			Vector3 bulletPosition =  getPosition() + fireDirection();
 			bulletClone = Instantiate(Resources.Load("Bullet", typeof(Bullet)), bulletPosition, Quaternion.identity) as Bullet;
-			bulletClone.velocity = fireDirection() * 5;
+			bulletClone.velocity = fireDirection() * game.bulletSpeed;
+			game.sendBullet(bulletPosition, bulletClone.velocity);
 		}
 	}
 

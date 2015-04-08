@@ -173,10 +173,13 @@ public class Server : MonoBehaviour{
 
 	}
 	[RPC]
-	public void createBullet(Vector3 pos, Vector3 vel){
+	public void createBulletServer(Vector3 pos, Vector3 vel, NetworkPlayer player){
 		game.createBullet (pos, vel);
-	}
+		networkView.RPC ("createBulletClient", RPCMode.All, pos, vel, player);
 
+	}
+	[RPC]
+	void createBulletClient (Vector3 pos, Vector3 vel, NetworkPlayer player){}
 	[RPC]
 	void updateDeadReckoningClients(bool dr){}
 	[RPC]

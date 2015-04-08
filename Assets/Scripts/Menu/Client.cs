@@ -31,7 +31,13 @@ public class Client : MonoBehaviour{
 	}
 	[RPC]
 	public void sendBullet(Vector3 pos, Vector3 vel){
-		networkView.RPC ("createBullet", RPCMode.Server, pos, vel);
+		networkView.RPC ("createBulletServer", RPCMode.Server, pos, vel, Network.player);
+	}
+	
+	[RPC]
+	void createBulletClient (Vector3 pos, Vector3 vel, NetworkPlayer player){
+		if (player != Network.player)
+			game.createBullet (pos, vel);
 	}
 	[RPC]
 	void updateDeadReckoningClients(bool dr){
@@ -98,5 +104,5 @@ public class Client : MonoBehaviour{
 	}
 
 	[RPC]
-	void createBullet(Vector3 pos, Vector3 vel){}
+	void createBulletServer(Vector3 pos, Vector3 vel, NetworkPlayer player){}
 }
