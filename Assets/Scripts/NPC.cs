@@ -10,6 +10,7 @@ public class NPC : MonoBehaviour {
     public Vector3 pastVelocity;
     public bool livesOnServer;
 	private int health;
+	public int id;
 
 	protected void Start(){
 		game =GameObject.Find ("GameController").GetComponent<GameController> ();
@@ -45,7 +46,7 @@ public class NPC : MonoBehaviour {
 		return this.transform.position;
 	}
 
-	public void setHelath(int hp){
+	public void setHealth(int hp){
 		this.health = hp;
 	}
 	public int getHealth(){

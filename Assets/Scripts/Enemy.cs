@@ -5,10 +5,10 @@ public class Enemy : NPC {
 
 	public SteeringManager steering;
 	public Transform[] track;
-	public int id;
-	private bool seesPlayer;
 	private Transform visibility;
 	public Transform target;
+	public Transform target2;
+	public ArrayList visiblePlayers;
 
 	public Enemy (Vector3 position) : base(position) {
 		Debug.Log("Enemy created at " +position);
@@ -19,8 +19,7 @@ public class Enemy : NPC {
 		base.Start ();
 		tag = "enemy";
 		this.steering = new SteeringManager(this);
-		this.seesPlayer = false;
-		this.target = GameObject.FindGameObjectWithTag("Player").transform;
+		this.visiblePlayers = new ArrayList();
 
 	}
 
@@ -28,9 +27,16 @@ public class Enemy : NPC {
 	void Update () {
 		this.pastVelocity = getVelocity();
 
+		// on sever, do own movement
 		if (this.getOnServer()){
-			// on sever, do own movement
-			steering.wander();
+
+			// check if player visible, if so do seek, else wander
+			if (canSee()) {
+				steering.seek(getClosestPlayer());
+			} else {
+				steering.wander();
+			}
+
 			velocity = steering.update();
 			velocity = truncate(velocity, MAX_VELOCITY);
 			//Update movement
@@ -40,11 +46,38 @@ public class Enemy : NPC {
 
 	}
 
-	private void checkVisibility() {
-		seesPlayer = visibility.collider.bounds.Intersects(target.collider.bounds);
-		if (seesPlayer) {
-			Debug.Log("Player seen.");
+	bool canSee(){
+		visiblePlayers.Clear();
+		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
+
+		foreach (GameObject p in players) {
+			RaycastHit hit;
+			Debug.DrawRay(transform.position, p.transform.position - transform.position, Color.black);
+			Physics.Raycast(transform.position,p.transform.position - transform.position , out hit);
+			if(hit.transform != null){
+				if(hit.transform.gameObject == p)
+					visiblePlayers.Add(p);
+			}
+
 		}
+		if(visiblePlayers.Count > 0)
+			return true;
+		return false;
+	}
+
+	Vector3 getClosestPlayer(){
+		Vector3 target = transform.position + velocity;
+		float dist = float.MaxValue;
+		foreach (GameObject p in visiblePlayers) {
+			float d = Vector3.Distance (p.transform.position, transform.position);
+			if (d < dist) {
+				dist = d;
+				Debug.Log(p.name);
+				target = p.transform.position;
+			}
+		}
+		return target;
+
 	}
 
 	public void isShot(){
