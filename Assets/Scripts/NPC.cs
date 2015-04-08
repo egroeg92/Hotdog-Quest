@@ -8,6 +8,7 @@ public class NPC : MonoBehaviour {
     public Vector3 velocity;
     public Vector3 pastVelocity;
     public bool livesOnServer;
+	private int health;
 
 	public NPC (Vector3 position) {
 		this.transform.position = position;
@@ -38,6 +39,17 @@ public class NPC : MonoBehaviour {
 
 	public Vector3 getPosition(){
 		return this.transform.position;
+	}
+
+	public void setHelath(int hp){
+		this.health = hp;
+	}
+	public int getHealth(){
+		return this.health;
+	}
+
+	public void takeDamage(int damage) {
+		this.health -= damage;
 	}
 
 	protected Vector3 truncate (Vector3 vector, float max) {
