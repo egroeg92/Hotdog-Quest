@@ -10,7 +10,6 @@ public class Player : NPC {
 
 	public Vector3 shootPoint;
 
-	public cannonBehaviour cannon;
 
 	public Player(Vector3 position) : base(position){}
 
@@ -79,10 +78,8 @@ public class Player : NPC {
 
 	public void disablePlayerControls(){
 		this.livesOnServer = false;
-		cannon.enabled = false;
 	}
 	public void enablePlayerControls(){
 		this.livesOnServer = true;
-		cannon.enabled = true;
 	}
 }
