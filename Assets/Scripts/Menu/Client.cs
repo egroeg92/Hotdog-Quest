@@ -30,6 +30,10 @@ public class Client : MonoBehaviour{
 		updatePlayerPosition (position,velocity, Network.player);
 	}
 	[RPC]
+	public void sendBullet(Vector3 pos, Vector3 vel){
+		networkView.RPC ("createBullet", RPCMode.Server, pos, vel);
+	}
+	[RPC]
 	void updateDeadReckoningClients(bool dr){
 		game.deadReckoningOn = dr;
 	}
@@ -71,9 +75,13 @@ public class Client : MonoBehaviour{
 	}
 		
 	[RPC]
-	public void connectedToServer(NetworkPlayer player, int connections){
+	public void connectedToServer(NetworkPlayer player, int connections, int dr){
 		if (Network.player == player) {
 			game.setPlayer(connections);
+			if(dr == 1)
+				game.deadReckoningOn = true;
+			else
+				game.deadReckoningOn = false;
 		}
 	}
 
@@ -89,5 +97,6 @@ public class Client : MonoBehaviour{
 		game.updateEnemy (key, pos, vel);
 	}
 
-
+	[RPC]
+	void createBullet(Vector3 pos, Vector3 vel){}
 }

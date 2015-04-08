@@ -24,11 +24,6 @@ public class Server : MonoBehaviour{
 	string net2 = null;
 
 
-
-
-
-
-
 	void Start(){
 		Debug.Log ("server started");
 		game.enemyAmount = enemyAmount;
@@ -90,7 +85,11 @@ public class Server : MonoBehaviour{
 			game.destroyEnemies();
 			//game.destroyPlayers();
 		}
-		networkView.RPC ("connectedToServer", RPCMode.All, player, connections);
+
+		if(game.deadReckoningOn)
+			networkView.RPC ("connectedToServer", RPCMode.All, player, connections, 1);
+		else
+			networkView.RPC ("connectedToServer", RPCMode.All, player, connections, 0);
 
 	}
 	[RPC]
@@ -174,6 +173,10 @@ public class Server : MonoBehaviour{
 		connections--;
 
 	}
+	[RPC]
+	public void createBullet(Vector3 pos, Vector3 vel){
+		game.createBullet (pos, vel);
+	}
 
 	[RPC]
 	void updateDeadReckoningClients(bool dr){}
@@ -182,7 +185,7 @@ public class Server : MonoBehaviour{
 	[RPC]
 	void receiveEnemyUpdate(int key, Vector3 pos, Vector3 vel){}
 	[RPC]
-	void connectedToServer(NetworkPlayer player, int connections){}
+	void connectedToServer(NetworkPlayer player, int connections, int dr){}
 	[RPC]
 	void receiveMap(NetworkPlayer p, Vector3 sizes, Vector3 pos, Vector3 plane, int count, int size){}
 

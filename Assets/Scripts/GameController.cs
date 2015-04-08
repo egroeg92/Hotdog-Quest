@@ -160,7 +160,14 @@ public class GameController : MonoBehaviour {
         }
 
     }
+	public void sendBullet(Vector3 pos, Vector3 vel){
+		if (client != null)
+			client.sendBullet (pos, vel);
 
+	}
+	public void createBullet(Vector3 pos, Vector3 vel){
+		//create bullet
+	}
 	/*
 	 *  UPDATES
 	 */

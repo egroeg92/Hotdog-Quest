@@ -113,9 +113,9 @@ public class Menu : MonoBehaviour {
 				GUI.Label(new Rect(200,250,250,50), "Player Updates without DR " + noDRtotal+ " / " + totalTimeNoDR);
 
 				GUI.Label(new Rect(200,300,250,50), "Number of Enemies" + game.enemies.Count);
-				GUI.Label(new Rect(200,350,250,50), "Enemy Updates Total " + DRtotal + " / "+totalTime) ;
-				GUI.Label(new Rect(200,400,250,50), "Enemy Updates with DR " + DRtotal + " / " +totalTimeDR);
-				GUI.Label(new Rect(200,450,250,50), "Enemy Updates without DR " + noDRtotal+ " / " + totalTimeNoDR);
+				GUI.Label(new Rect(200,350,250,50), "Enemy Updates Total " + eDRtotal + " / "+totalTime) ;
+				GUI.Label(new Rect(200,400,250,50), "Enemy Updates with DR " + eDRtotal + " / " +totalTimeDR);
+				GUI.Label(new Rect(200,450,250,50), "Enemy Updates without DR " + eNoDRtotal+ " / " + totalTimeNoDR);
 
 				
 				if(GUI.Button(new Rect(50,50,150,50),"Logout Server")){

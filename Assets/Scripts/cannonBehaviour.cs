@@ -16,15 +16,13 @@ public class cannonBehaviour : MonoBehaviour {
 	void Update () {
 		if (enabled) {
 			mousePos = Input.mousePosition;
-			//mousePos.z = -(transform.position.x - Camera.mainCamera.transform.position.x);
+
 			worldPos = Camera.mainCamera.ScreenToWorldPoint (mousePos);
 			worldPos = new Vector3(worldPos.x, transform.position.y, worldPos.z);
 
 			Vector3 parentPos = transform.parent.transform.position;
-			//transform.position = new Vector3(parentPos.x, transform.position.y, parentPos.x +.5f);
-			transform.LookAt (worldPos);
 
-			//Debug.Log (transform.RotateAround(transform.parent.transform.position, Vector3.up, 20 * Time.deltaTime));
+			transform.LookAt (worldPos);
 
 
 		}
