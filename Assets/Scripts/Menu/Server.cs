@@ -97,6 +97,15 @@ public class Server : MonoBehaviour{
 
 	}
 	[RPC]
+	public void playerHitServer(int id, float health, NetworkPlayer p){
+		game.playerHit (id, health, true);
+		networkView.RPC ("playerHitReceive",RPCMode.All, id, health, p);
+	}
+	[RPC]
+	public void playerHitServer(int id, float health){
+		networkView.RPC ("playerHitReceive",RPCMode.All, id, health, Network.player);
+	}
+	[RPC]
 	public void latencyCheckSend(){
 		timeSent = Time.realtimeSinceStartup;
 		if (connections == 2) {
@@ -152,10 +161,12 @@ public class Server : MonoBehaviour{
 
 	[RPC]
 	public void sendEnemyUpdates(){
-		foreach (DictionaryEntry d in game.getEnemies()) {
-			enemyUpdateCountNoDR++;
-			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key,((Enemy)d.Value).transform.position, ((Enemy)d.Value).velocity, player1, latency1);
-			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key,((Enemy)d.Value).transform.position, ((Enemy)d.Value).velocity, player2, latency2);
+		if (connections == 2) {
+			foreach (DictionaryEntry d in game.getEnemies()) {
+				enemyUpdateCountNoDR++;
+				networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((Enemy)d.Value).transform.position, ((Enemy)d.Value).velocity, player1, latency1);
+				networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((Enemy)d.Value).transform.position, ((Enemy)d.Value).velocity, player2, latency2);
+			}
 		}
 	}
 	[RPC]
@@ -212,6 +223,10 @@ public class Server : MonoBehaviour{
 		networkView.RPC ("createBulletClient", RPCMode.All, pos, vel, player, clientToclientLatency);
 
 	}
+
+	[RPC]
+	void playerHitReceive(int id, float health,NetworkPlayer p){}
+
 	[RPC]
 	void enemyShotRecieve(int id){}
 	[RPC]

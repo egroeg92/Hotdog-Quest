@@ -11,11 +11,14 @@ public class Player : NPC {
 	public Vector3 shootPoint;
 
 
+
 	public Player(Vector3 position) : base(position){}
 
+	bool beingHit = false;
 	// Use this for initialization
 	void Start () {
 		base.Start ();
+		setHealth (100);
 		gameObject.rigidbody.freezeRotation = true;
 
 		//disablePlayerControls ();
@@ -33,6 +36,11 @@ public class Player : NPC {
 			transform.position += velocity * Time.deltaTime;
 			shoot();
 		}
+		if (beingHit) {
+			float minus = Time.deltaTime * 20;
+			setHealth (getHealth () - minus);
+			game.playerHit (id, getHealth (), false);
+		}
 
 	}
 
@@ -41,6 +49,22 @@ public class Player : NPC {
 		pastVelocity = velocity;
 
 	}
+
+	void OnCollisionEnter(Collision col){
+		
+		if (col.gameObject.tag == "enemy") {
+			beingHit = true;
+
+		}
+		
+		
+	}
+	void OnCollisionExit(Collision col){
+		if (col.gameObject.tag == "enemy") {
+			beingHit = false;
+		}
+	}
+
 
 	private void shoot(){
 		if (Input.GetMouseButtonDown(0)){

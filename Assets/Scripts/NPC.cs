@@ -9,7 +9,7 @@ public class NPC : MonoBehaviour {
     public Vector3 velocity;
     public Vector3 pastVelocity;
     public bool livesOnServer;
-	private int health;
+	private float health;
 	public int id;
 
 	protected void Start(){
@@ -51,10 +51,10 @@ public class NPC : MonoBehaviour {
 		return this.transform.position;
 	}
 
-	public void setHealth(int hp){
+	public void setHealth(float hp){
 		this.health = hp;
 	}
-	public int getHealth(){
+	public float getHealth(){
 		return this.health;
 	}
 

@@ -29,6 +29,20 @@ public class Client : MonoBehaviour{
 	public void updatePosition(Vector3 position, Vector3 velocity){
 		updatePlayerPosition (position,velocity, Network.player);
 	}
+
+	[RPC]
+	public void playerHitClient(int id, float health){
+		networkView.RPC ("playerHitServer", RPCMode.Server, id, health, Network.player);
+	}
+	[RPC]
+	public void playerHitReceive(int id, float health, NetworkPlayer p){
+		if(Network.player != p)
+			game.playerHit (id, health, true);
+	}
+
+	[RPC]
+	void playerHitServer(int id, float health, NetworkPlayer p){
+	}
 	[RPC]
 	public void enemyShotSend(int id){
 		networkView.RPC ("enemyShotServer",RPCMode.Server, id);

@@ -72,8 +72,24 @@ public class Menu : MonoBehaviour {
 
 			}
 		} else {
+			if(game.Player1 != null && game.Player2 != null){
+				if(game.Player1.getHealth() <= 0 ){
+					GUI.Label(new Rect(100,0,100,50), "Player 1 is DEAD");
+				}else{
+					GUI.Label(new Rect(100,0,100,50), "Player 1 Health " + game.Player1.getHealth() + "/ 100");
+				}
+				if(game.Player2.getHealth() <= 0){
+					GUI.Label(new Rect(100,0,100,50), "Player 2 is DEAD");
+
+				}else{
+					GUI.Label(new Rect(300,0,100,50), "Player 2 Health " + game.Player2.getHealth() + "/ 100");
+				}
+			}
+
+
 			if (Network.peerType == NetworkPeerType.Client) {
 				GUI.Label(new Rect(200,50,250,50), "Number Of Enemies left " + game.enemies.Count);
+
 
 				if (GUI.Button (new Rect (50, 50, 150, 50), "Logout Client")) {
                     game.client.destroy();
