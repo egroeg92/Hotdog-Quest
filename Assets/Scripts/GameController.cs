@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour {
 
 	public bool deadReckoningOn = false;
 
-	GameObject plane;
+	public GameObject plane;
 
 	int playerId = -1;
 
