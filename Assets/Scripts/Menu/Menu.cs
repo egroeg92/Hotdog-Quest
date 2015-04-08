@@ -108,14 +108,19 @@ public class Menu : MonoBehaviour {
 				float totalTimeNoDR = game.server.noDRTime;
 				float totalTime = totalTimeNoDR + totalTimeDR;
 
-				GUI.Label(new Rect(200,150,250,50), "Player Updates Total " + DRtotal + " / "+totalTime) ;
+				GUI.Label(new Rect(200,150,250,50), "Player Updates Total " + total + " / "+totalTime) ;
 				GUI.Label(new Rect(200,200,250,50), "Player Updates with DR " + DRtotal + " / " +totalTimeDR);
 				GUI.Label(new Rect(200,250,250,50), "Player Updates without DR " + noDRtotal+ " / " + totalTimeNoDR);
 
-				GUI.Label(new Rect(200,300,250,50), "Number of Enemies" + game.enemies.Count);
-				GUI.Label(new Rect(200,350,250,50), "Enemy Updates Total " + eDRtotal + " / "+totalTime) ;
+				GUI.Label(new Rect(200,300,250,50), "Number of Enemies " + game.enemies.Count);
+				GUI.Label(new Rect(200,350,250,50), "Enemy Updates Total " + eTotal + " / "+totalTime) ;
 				GUI.Label(new Rect(200,400,250,50), "Enemy Updates with DR " + eDRtotal + " / " +totalTimeDR);
 				GUI.Label(new Rect(200,450,250,50), "Enemy Updates without DR " + eNoDRtotal+ " / " + totalTimeNoDR);
+
+				GUI.Label(new Rect(450,400,250,50), "Player 1 latency " + game.server.latency1);
+				GUI.Label(new Rect(450,450,250,50), "Player 2 latency " + game.server.latency2);
+
+
 
 				
 				if(GUI.Button(new Rect(50,50,150,50),"Logout Server")){

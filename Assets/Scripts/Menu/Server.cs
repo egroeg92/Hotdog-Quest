@@ -18,6 +18,11 @@ public class Server : MonoBehaviour{
 	public float DRTime = 0;
 	public float noDRTime = 0;
 
+	
+	float timeSent;
+	public float latency1, latency2, clientToclientLatency;
+	public float latencyInterval = 600;
+
 	NetworkPlayer player1 ;
 	NetworkPlayer player2 ;
 	string net1 = null;
@@ -29,7 +34,9 @@ public class Server : MonoBehaviour{
 		game.enemyAmount = enemyAmount;
 		game.createMap ();
 
-
+		latency1 = 0;
+		latency2 = 0;
+		clientToclientLatency = 0;
 		//game.instantiateEnemies ();
 
 	}
@@ -51,13 +58,10 @@ public class Server : MonoBehaviour{
 		else
 			noDRTime += Time.deltaTime;
 
-	}
-	void LateUpdate(){
-		//if (connections == 2) {
+		if (Time.frameCount % latencyInterval == 0) {
+			latencyCheckSend ();
+		}
 
-			//sendEnemyUpdates();
-
-		//}
 	}
 
 	void OnPlayerConnected(NetworkPlayer player){
@@ -80,6 +84,7 @@ public class Server : MonoBehaviour{
 			game.createEnemies ();
 			game.instantiateEnemyMovement ();
 			sendEnemies ();
+			latencyCheckSend();
 		} else {
 			game.destroyEnemies();
 			//game.destroyPlayers();
@@ -91,6 +96,24 @@ public class Server : MonoBehaviour{
 			networkView.RPC ("connectedToServer", RPCMode.All, player, connections, 0);
 
 	}
+	[RPC]
+	public void latencyCheckSend(){
+		timeSent = Time.realtimeSinceStartup;
+		if (connections == 2) {
+			networkView.RPC ("latencyRecieve", RPCMode.All);
+		}
+	}
+	[RPC]
+	public void latencyCheckReceive(NetworkPlayer p){
+		if (p == player1) {
+			latency1 = Time.realtimeSinceStartup - timeSent;
+
+		} else if (p == player2){
+			latency2 = Time.realtimeSinceStartup - timeSent;
+		}
+		clientToclientLatency = latency1 + latency2;
+	}
+
 	[RPC]
 	public void updateDeadReckoning(){
 		networkView.RPC ("updateDeadReckoningClients", RPCMode.All, game.deadReckoningOn);
@@ -125,14 +148,15 @@ public class Server : MonoBehaviour{
 	public void sendEnemyUpdates(){
 		foreach (DictionaryEntry d in game.getEnemies()) {
 			enemyUpdateCountNoDR++;
-			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key, ((Enemy)d.Value).transform.position, ((Enemy)d.Value).velocity);
+			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key,((Enemy)d.Value).transform.position, ((Enemy)d.Value).velocity, player1, latency1);
+			networkView.RPC ("receiveEnemyUpdate", RPCMode.All, (int)d.Key,((Enemy)d.Value).transform.position, ((Enemy)d.Value).velocity, player2, latency2);
 		}
 	}
 	[RPC]
 	public void sendEnemyUpdates(int key){
 		enemyUpdateCountDR++;
-		networkView.RPC ("receiveEnemyUpdate", RPCMode.All, key, ((Enemy)game.enemies[key]).transform.position, ((Enemy)game.enemies[key]).velocity);
-
+		networkView.RPC ("receiveEnemyUpdate", RPCMode.All, key, ((Enemy)game.enemies[key]).transform.position, ((Enemy)game.enemies[key]).velocity,player1, latency1);
+		networkView.RPC ("receiveEnemyUpdate", RPCMode.All, key, ((Enemy)game.enemies[key]).transform.position, ((Enemy)game.enemies[key]).velocity,player2, latency2);
 	}
 	[RPC]
 	void updatePlayerPosition(Vector3 position,Vector3 velocity, NetworkPlayer player){
@@ -143,14 +167,14 @@ public class Server : MonoBehaviour{
 
 
 		if (player == player1) {
-			game.updatePlayerServer(1,position,velocity);
+			game.updatePlayerServer(1,position,velocity,latency1);
 			if(player2 !=null)
-				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player2, position,  velocity);
+				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player2, position,  velocity,clientToclientLatency);
 
 		} else if (player == player2) {
-			game.updatePlayerServer(2,position,velocity);
+			game.updatePlayerServer(2,position,velocity,latency2);
 			if(player1!=null)
-				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player1, position,  velocity);
+				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player1, position,  velocity,clientToclientLatency);
 		} else {
 			Debug.Log ("trying to update wrong player");
 		}
@@ -174,18 +198,24 @@ public class Server : MonoBehaviour{
 	}
 	[RPC]
 	public void createBulletServer(Vector3 pos, Vector3 vel, NetworkPlayer player){
-		game.createBullet (pos, vel);
-		networkView.RPC ("createBulletClient", RPCMode.All, pos, vel, player);
+		if (player == player1)
+			game.createBullet (pos, vel, latency1);
+		else if (player == player2)
+			game.createBullet (pos, vel, latency2);
+
+		networkView.RPC ("createBulletClient", RPCMode.All, pos, vel, player, clientToclientLatency);
 
 	}
 	[RPC]
-	void createBulletClient (Vector3 pos, Vector3 vel, NetworkPlayer player){}
+	void latencyRecieve(){}
+	[RPC]
+	void createBulletClient (Vector3 pos, Vector3 vel, NetworkPlayer player, float latency){}
 	[RPC]
 	void updateDeadReckoningClients(bool dr){}
 	[RPC]
-	void receivePlayerUpdate(NetworkPlayer toPlayer, Vector3 pos, Vector3 vel){}
+	void receivePlayerUpdate(NetworkPlayer toPlayer, Vector3 pos, Vector3 vel, float latency){}
 	[RPC]
-	void receiveEnemyUpdate(int key, Vector3 pos, Vector3 vel){}
+	void receiveEnemyUpdate(int key, Vector3 pos, Vector3 vel,NetworkPlayer player, float latency){}
 	[RPC]
 	void connectedToServer(NetworkPlayer player, int connections, int dr){}
 	[RPC]

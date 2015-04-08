@@ -166,9 +166,9 @@ public class GameController : MonoBehaviour {
 			client.sendBullet (pos, vel);
 
 	}
-	public void createBullet(Vector3 pos, Vector3 vel){
+	public void createBullet(Vector3 pos, Vector3 vel, float latency){
 		//create bullet
-		Bullet bulletClone = Instantiate(Resources.Load("Bullet", typeof(Bullet)), pos, Quaternion.identity) as Bullet;
+		Bullet bulletClone = Instantiate(Resources.Load("Bullet", typeof(Bullet)), pos + (vel * latency), Quaternion.identity) as Bullet;
 		bulletClone.velocity = vel;
 	}
 	/*
@@ -223,15 +223,15 @@ public class GameController : MonoBehaviour {
 	}
 
 
-	public void updatePlayerServer(int id, Vector3 position,Vector3 velocity){
+	public void updatePlayerServer(int id, Vector3 position,Vector3 velocity, float latency){
 		if (id == 1) {
 			if(Player1 != null){
-				Player1.transform.position = position;
+				Player1.transform.position = position + (velocity * latency);
 				Player1.velocity = velocity;
 			}
 		} else if (id == 2)  {
 			if(Player2 != null){
-				Player2.transform.position = position;
+				Player2.transform.position = position + (velocity * latency);
 				Player2.velocity = velocity;
 			}
 		}
@@ -247,9 +247,9 @@ public class GameController : MonoBehaviour {
 		}
 
 	}
-	public void updateEnemy(int key, Vector3 position, Vector3 velocity){
+	public void updateEnemy(int key, Vector3 position, Vector3 velocity, float latency){
 		if (enoughEnemies) {
-			((Enemy)enemies [key]).transform.position = position;
+			((Enemy)enemies [key]).transform.position = position + (velocity * latency);
 			((Enemy)enemies [key]).velocity = velocity;
 
 		}

@@ -30,14 +30,18 @@ public class Client : MonoBehaviour{
 		updatePlayerPosition (position,velocity, Network.player);
 	}
 	[RPC]
+	public void latencyRecieve(){
+		networkView.RPC ("latencyCheckReceive", RPCMode.Server, Network.player);
+	}
+	[RPC]
 	public void sendBullet(Vector3 pos, Vector3 vel){
 		networkView.RPC ("createBulletServer", RPCMode.Server, pos, vel, Network.player);
 	}
 	
 	[RPC]
-	void createBulletClient (Vector3 pos, Vector3 vel, NetworkPlayer player){
+	void createBulletClient (Vector3 pos, Vector3 vel, NetworkPlayer player, float latency){
 		if (player != Network.player)
-			game.createBullet (pos, vel);
+			game.createBullet (pos, vel, latency);
 	}
 	[RPC]
 	void updateDeadReckoningClients(bool dr){
@@ -99,10 +103,13 @@ public class Client : MonoBehaviour{
 
 	}
 	[RPC]
-	void receiveEnemyUpdate(int key, Vector3 pos, Vector3 vel){
-		game.updateEnemy (key, pos, vel);
+	void receiveEnemyUpdate(int key, Vector3 pos, Vector3 vel,NetworkPlayer player , float latency){
+		if(Network.player == player)
+			game.updateEnemy (key, pos, vel,latency);
 	}
 
 	[RPC]
 	void createBulletServer(Vector3 pos, Vector3 vel, NetworkPlayer player){}
+	[RPC]
+	void latencyCheckReceive(NetworkPlayer player){}
 }
