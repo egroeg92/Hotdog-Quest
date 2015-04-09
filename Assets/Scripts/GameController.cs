@@ -99,7 +99,7 @@ public class GameController : MonoBehaviour {
 		Enemy e = Instantiate(Resources.Load("Enemy", typeof(Enemy)), getValidPosition(), Quaternion.identity) as Enemy;
 		e.id = key;
 		e.velocity = new Vector3 (Random.Range (0.0f, enemySpeed), 0, Random.Range (0.0f, enemySpeed));
-
+		e.setMaxVelocity (enemySpeed);
 		enemies.Add(key,e);
 
 		return e;
@@ -314,9 +314,10 @@ public class GameController : MonoBehaviour {
 	}
 	public void updateEnemy(int key, Vector3 position, Vector3 velocity, float latency){
 		if (enoughEnemies) {
-			((Enemy)enemies [key]).transform.position = position + (velocity * latency);
-			((Enemy)enemies [key]).velocity = velocity;
-
+			if (enemies [key] != null){
+				((Enemy)enemies [key]).transform.position = position + (velocity * latency);
+				((Enemy)enemies [key]).velocity = velocity;
+		}
 		}
 	}
 	public void playerHit (int id, float health, bool received){
