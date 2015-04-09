@@ -98,7 +98,8 @@ public class GameController : MonoBehaviour {
 
 		Enemy e = Instantiate(Resources.Load("Enemy", typeof(Enemy)), getValidPosition(), Quaternion.identity) as Enemy;
 		e.id = key;
-		Vector3 velocity = new Vector3 (Random.Range (0.0f, enemySpeed), 0, Random.Range (0.0f, enemySpeed));
+		e.velocity = new Vector3 (Random.Range (0.0f, enemySpeed), 0, Random.Range (0.0f, enemySpeed));
+
 		enemies.Add(key,e);
 
 		return e;
