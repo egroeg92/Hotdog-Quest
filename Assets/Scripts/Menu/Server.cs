@@ -18,6 +18,8 @@ public class Server : MonoBehaviour{
 	public float DRTime = 0;
 	public float noDRTime = 0;
 
+	public float newEnemyRate;
+
 	
 	float timeSent;
 	public float latency1, latency2, clientToclientLatency;
@@ -37,6 +39,8 @@ public class Server : MonoBehaviour{
 		latency1 = 0;
 		latency2 = 0;
 		clientToclientLatency = 0;
+
+		newEnemyRate = game.enemyRespawnRate;
 		//game.instantiateEnemies ();
 
 	}
@@ -60,6 +64,15 @@ public class Server : MonoBehaviour{
 
 		if (Time.frameCount % latencyInterval == 0) {
 			latencyCheckSend ();
+		}
+
+		if (connections == 2) {
+			if(Time.frameCount % newEnemyRate == 0)
+			{
+				Enemy e = game.createNewEnemy();
+				networkView.RPC ("newEnemy",RPCMode.All, e.id, e.position, e.velocity,player1, latency1);
+				networkView.RPC ("newEnemy",RPCMode.All, e.id, e.position, e.velocity,player2, latency2);
+			}
 		}
 
 	}
@@ -87,7 +100,6 @@ public class Server : MonoBehaviour{
 			latencyCheckSend();
 		} else {
 			game.destroyEnemies();
-			//game.destroyPlayers();
 		}
 
 		if(game.deadReckoningOn)
@@ -223,7 +235,8 @@ public class Server : MonoBehaviour{
 		networkView.RPC ("createBulletClient", RPCMode.All, pos, vel, player, clientToclientLatency);
 
 	}
-
+	[RPC]
+	void newEnemy(int id,Vector3 pos, Vector3 velocity, NetworkPlayer p, float latency){}
 	[RPC]
 	void playerHitReceive(int id, float health,NetworkPlayer p){}
 

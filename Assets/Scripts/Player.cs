@@ -30,7 +30,6 @@ public class Player : NPC {
 
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (beingHit);
 		if (this.getOnServer() && !Dead) {
 			pastVelocity = velocity;
 			velocity = MoveVector ();
@@ -38,12 +37,6 @@ public class Player : NPC {
 			transform.position += velocity * Time.deltaTime;
 			shoot();
 		}
-		if (beingHit) {
-			float minus = Time.deltaTime * 20;
-			setHealth (getHealth () - minus);
-			game.playerHit (id, getHealth (), false);
-		}
-
 	}
 
 	public void updateVelocity(){
@@ -53,17 +46,9 @@ public class Player : NPC {
 	}
 
 	void OnCollisionEnter(Collision col){
-		
 		if (col.gameObject.tag == "enemy") {
-			beingHit = true;
-
-		}
-		
-		
-	}
-	void OnCollisionExit(Collision col){
-		if (col.gameObject.tag == "enemy") {
-			beingHit = false;
+			setHealth (0);
+			game.playerHit (id, getHealth (), false);
 		}
 	}
 

@@ -29,7 +29,12 @@ public class Client : MonoBehaviour{
 	public void updatePosition(Vector3 position, Vector3 velocity){
 		updatePlayerPosition (position,velocity, Network.player);
 	}
-
+	[RPC]
+	public void newEnemy(int id, Vector3 pos, Vector3 velocity, NetworkPlayer p, float latency){
+		if (p == Network.player) {
+			game.createNewEnemy (id, pos + (velocity * latency), velocity);
+		}
+	}
 	[RPC]
 	public void playerHitClient(int id, float health){
 		networkView.RPC ("playerHitServer", RPCMode.Server, id, health, Network.player);

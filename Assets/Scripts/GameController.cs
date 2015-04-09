@@ -23,8 +23,13 @@ public class GameController : MonoBehaviour {
 	public float enemySpeed;
 	public float playerSpeed;
 	public float bulletSpeed = 5;
+	public float enemyRespawnRate = 10;
 
-	public float playerPositionDifferenceThreshold = .1f;
+	public int mapDim = 100;
+	public int mapDiv = 100;
+	public int mapCourtProb = 100;
+	public int mapNoise = 1;
+
 
 	public bool deadReckoningOn = false;
 
@@ -47,6 +52,11 @@ public class GameController : MonoBehaviour {
 	void Start () {
 		enemies = new Hashtable ();
 		mainCamera.orthographic = true;
+		mapGenerator.dim = mapDim;
+		mapGenerator.divisionDim = mapDiv;
+		mapGenerator.courtProb = mapCourtProb;
+		mapGenerator.neighbourhoodSizeNoise = mapNoise;
+
 	}
 
 	public void createEnemies(){
@@ -66,8 +76,10 @@ public class GameController : MonoBehaviour {
 			enemy.id = (int)d.Key;
 			enemies.Add(enemy.id,enemy);
 			enemy.livesOnServer = false;
+			Debug.Log (enemy.id);
 		}
 	}
+
 	public void instantiateEnemyMovement(){
 		foreach (DictionaryEntry e in enemies) {
 			Enemy en = (Enemy) e.Value;
@@ -75,7 +87,31 @@ public class GameController : MonoBehaviour {
 			en.velocity = velocity;
 			en.setMaxVelocity(enemySpeed);
 			en.livesOnServer = true;
+		}
+
 	}
+	public Enemy createNewEnemy(){
+		int key = enemies.Count;
+		while (enemies[key] != null)
+			key++;
+		Debug.Log (key);
+
+		Enemy e = Instantiate(Resources.Load("Enemy", typeof(Enemy)), getValidPosition(), Quaternion.identity) as Enemy;
+		e.id = key;
+		enemies.Add(key,e);
+
+		return e;
+	}
+	public void createNewEnemy (int id, Vector3 pos, Vector3 velocity){
+		Debug.Log (id);
+		Enemy e = Instantiate(Resources.Load("Enemy", typeof(Enemy)), pos, Quaternion.identity) as Enemy;
+		e.velocity = velocity;
+		e.id = id;
+		if (enemies [id] != null)
+			Debug.LogError ("enemy already exists");
+		else
+			enemies.Add(id,e);
+	
 
 	}
 	public void createMap(){
