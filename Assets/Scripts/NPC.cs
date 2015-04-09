@@ -22,6 +22,11 @@ public class NPC : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		if (transform.position.y != game.plane.transform.position.y + transform.localScale.y/2){
+			Vector3 correctedPos = transform.position;
+			correctedPos.y = game.plane.transform.position.y + transform.localScale.y/2;
+			transform.position = correctedPos;
+		}
 	}
 
 	public Vector3 getVelocity() {

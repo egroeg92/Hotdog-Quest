@@ -5,11 +5,11 @@ public class SteeringManager : MonoBehaviour {
     public Vector3 steering;
     public NPC host;
     public float MAX_FORCE = 4.0f;
-    public float MAX_SEE_AHEAD = 1.0f;
-    public float MAX_AVOID_FORCE = 1.0f;
-    public float CIRCLE_DISTANCE = 1.0f;
-    public float CIRCLE_RADIUS = 1.5f;
-    private float ANGLE_CHANGE = 15;
+    public float MAX_SEE_AHEAD = 3.0f;
+    public float MAX_AVOID_FORCE = 3.0f;
+    public float CIRCLE_DISTANCE = 0.75f;
+    public float CIRCLE_RADIUS = 0.75f;
+    private float ANGLE_CHANGE = 10;
     private float wanderAngle;
     private Vector3 ahead;
     private Vector3 ahead2;
@@ -53,11 +53,9 @@ public class SteeringManager : MonoBehaviour {
 	}
 
 	protected Vector3 collisionAvoidance(){
-        float dynamic_length = host.getVelocity().magnitude / host.getMaxVelocity();
-		ahead = host.getPosition() + host.getVelocity().normalized * dynamic_length;
-		ahead2 = Vector3.zero;
-        ahead2.x = ahead.x *0.5f;
-        ahead2.z = ahead.z *0.5f;
+        float dynamic_length = (float)host.getVelocity().magnitude / (float)host.getMaxVelocity();
+		ahead = (MAX_SEE_AHEAD * host.getVelocity().normalized * dynamic_length);
+		ahead2 = ahead * 0.5f;
 
 		Debug.DrawRay(host.getPosition(), ahead, Color.green);
 		Debug.DrawRay(host.getPosition(), ahead2, Color.red);
@@ -78,12 +76,13 @@ public class SteeringManager : MonoBehaviour {
 	    return avoidance;
 	}
 
-    private bool lineIntersectsObstacle(Vector3 ahead, Vector3 ahead2, GameObject obstacle) {
+    private bool lineIntersectsObstacle(Vector3 ahead, Vector3 ahead2, Vector3 pos, GameObject obstacle) {
         // the property "center" of the obstacle is a Vector3D.
         Vector3 center = obstacle.GetComponent<Renderer>().bounds.center;
         float radius = obstacle.GetComponent<Renderer>().bounds.extents.magnitude;
         return Vector3.Distance(center, ahead) <= radius
-                    || Vector3.Distance(center, ahead2) <= radius;
+                    || Vector3.Distance(center, ahead2) <= radius
+                    || Vector3.Distance(center, pos) <= radius;
     }
 
     private GameObject findMostThreateningObstacle(){
@@ -92,7 +91,7 @@ public class SteeringManager : MonoBehaviour {
 		obstacles = GameObject.FindGameObjectsWithTag("city");
 
 		foreach (GameObject o in obstacles) {
-			bool collision = lineIntersectsObstacle(ahead, ahead2, o);
+			bool collision = lineIntersectsObstacle(ahead, ahead2, host.getPosition(), o);
             if (collision && (mostThreatening == null
                     || Vector3.Distance(host.getPosition(), o.transform.position) < Vector3.Distance(host.getPosition(), mostThreatening.transform.position))) {
 	            mostThreatening = o;
@@ -113,6 +112,7 @@ public class SteeringManager : MonoBehaviour {
 		float distance;
 
 		Vector3 desired = target - host.transform.position;
+        desired.y = 0;
 		distance = desired.magnitude;
 		desired = desired.normalized;
 

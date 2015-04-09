@@ -40,7 +40,7 @@ public class Enemy : NPC {
 			velocity = steering.update();
 			velocity = truncate(velocity, MAX_VELOCITY);
 			//Update movement
-			transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), 4 * Time.deltaTime);
+			//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), 4 * Time.deltaTime);
 			transform.Translate(velocity * Time.deltaTime);
 		}
 
@@ -90,7 +90,5 @@ public class Enemy : NPC {
 			game.enemyShot(id, false);
 			Destroy (gameObject);
 		}
-
-
 	}
 }
