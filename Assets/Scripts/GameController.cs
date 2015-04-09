@@ -76,7 +76,6 @@ public class GameController : MonoBehaviour {
 			enemy.id = (int)d.Key;
 			enemies.Add(enemy.id,enemy);
 			enemy.livesOnServer = false;
-			Debug.Log (enemy.id);
 		}
 	}
 
@@ -94,9 +93,9 @@ public class GameController : MonoBehaviour {
 		int key = enemies.Count;
 		while (enemies[key] != null)
 			key++;
-		Debug.Log (key);
-
-		Enemy e = Instantiate(Resources.Load("Enemy", typeof(Enemy)), getValidPosition(), Quaternion.identity) as Enemy;
+		Vector3 pos = getValidPosition ();
+		Debug.Log (pos);
+		Enemy e = Instantiate(Resources.Load("Enemy", typeof(Enemy)), pos, Quaternion.identity) as Enemy;
 		e.id = key;
 		e.velocity = new Vector3 (Random.Range (0.0f, enemySpeed), 0, Random.Range (0.0f, enemySpeed));
 		e.setMaxVelocity (enemySpeed);
@@ -106,7 +105,6 @@ public class GameController : MonoBehaviour {
 		return e;
 	}
 	public void createNewEnemy (int id, Vector3 pos, Vector3 velocity){
-		Debug.Log (id);
 		Enemy e = Instantiate(Resources.Load("Enemy", typeof(Enemy)), pos, Quaternion.identity) as Enemy;
 		e.velocity = velocity;
 		e.id = id;
@@ -218,7 +216,6 @@ public class GameController : MonoBehaviour {
 	void Update () {
 		if (Player1 != null && Player2 != null) {
 
-			//Refactor lives on server to disable moving
 
 			if(Player1.getHealth() <= 0){
 				Player1.renderer.material.color = Color.black;
@@ -464,7 +461,7 @@ public class GameController : MonoBehaviour {
 			float posx = Random.Range(this.plane.renderer.bounds.min.x, this.plane.renderer.bounds.max.x);
 			float posz = Random.Range(this.plane.renderer.bounds.min.z, this.plane.renderer.bounds.max.z);
 			Vector3 pos = new Vector3(posx, 1, posz);
-			float spawn_radius = 0.5f;
+			float spawn_radius = 0.3f;
 			Collider[] hitColliders = Physics.OverlapSphere(pos, spawn_radius);
 
 			if (hitColliders.Length == 0) {

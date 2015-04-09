@@ -72,7 +72,6 @@ public class Enemy : NPC {
 			float d = Vector3.Distance (p.transform.position, transform.position);
 			if (d < dist) {
 				dist = d;
-				Debug.Log(p.name);
 				target = p.transform.position;
 			}
 		}
@@ -80,13 +79,9 @@ public class Enemy : NPC {
 
 	}
 
-	public void isShot(){
-		Debug.Log (id + " shot ");
-	}
 	void OnCollisionEnter(Collision col){
 
 		if (col.gameObject.tag == "bullet") {
-			Debug.Log ("hit enemy");
 			game.enemyShot(id, false);
 			Destroy (gameObject);
 		}
