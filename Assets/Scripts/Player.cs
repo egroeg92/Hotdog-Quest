@@ -48,7 +48,8 @@ public class Player : NPC {
 	void OnCollisionEnter(Collision col){
 		if (col.gameObject.tag == "enemy") {
 			setHealth (0);
-			game.playerHit (id, getHealth (), false);
+			game.playerHit (id, transform.position, getHealth (), false);
+			velocity = Vector3.zero;
 		}
 	}
 

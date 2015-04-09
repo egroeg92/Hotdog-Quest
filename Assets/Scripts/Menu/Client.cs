@@ -36,17 +36,17 @@ public class Client : MonoBehaviour{
 		}
 	}
 	[RPC]
-	public void playerHitClient(int id, float health){
-		networkView.RPC ("playerHitServer", RPCMode.Server, id, health, Network.player);
+	public void playerHitClient(int id, Vector3 position, float health){
+		networkView.RPC ("playerHitServer", RPCMode.Server, id, position, health, Network.player);
 	}
 	[RPC]
-	public void playerHitReceive(int id, float health, NetworkPlayer p){
+	public void playerHitReceive(int id, Vector3 position, float health, NetworkPlayer p){
 		if(Network.player != p)
-			game.playerHit (id, health, true);
+			game.playerHit (id, position, health, true);
 	}
 
 	[RPC]
-	void playerHitServer(int id, float health, NetworkPlayer p){
+	void playerHitServer(int id, Vector3 position, float health, NetworkPlayer p){
 	}
 	[RPC]
 	public void enemyShotSend(int id){

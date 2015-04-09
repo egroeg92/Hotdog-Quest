@@ -318,35 +318,39 @@ public class GameController : MonoBehaviour {
 		}
 		}
 	}
-	public void playerHit (int id, float health, bool received){
+	public void playerHit (int id, Vector3 position, float health, bool received){
 		if (client != null && !received) {
 			if (id == 1) {
-				client.playerHitClient (id, Player1.getHealth ());
-				playerSetHealth (id, health);
+				client.playerHitClient (id, position, Player1.getHealth ());
+				playerSetHealth (id, health, position);
+
 
 			} else if (id == 2) {
-				client.playerHitClient (id, Player2.getHealth ());
-				playerSetHealth (id, health);
+				client.playerHitClient (id,position, Player2.getHealth ());
+				playerSetHealth (id, health, position);
 
 			}
 		} else if (server != null && !received) {
 			if (id == 1) {
-				server.playerHitServer (id, Player1.getHealth ());
-				playerSetHealth (id, health);
+				server.playerHitServer (id, Player1.getHealth (), position);
+				playerSetHealth (id, health, position);
 
 			} else if (id == 2) {
-				server.playerHitServer (id, Player2.getHealth ());
-				playerSetHealth (id, health);
+				server.playerHitServer (id, Player2.getHealth (), position);
+				playerSetHealth (id, health, position);
 
 			}
 		}
 
 	}
-	void playerSetHealth(int id , float health){
+	void playerSetHealth(int id , float health, Vector3 position){
 		if (id == 1) {
 			Player1.setHealth (health);
+			Player1.velocity = Vector3.zero;
+
 		} else if (id == 2) {
 			Player2.setHealth (health);
+			Player2.velocity = Vector3.zero;
 		}
 	}
 	/*
@@ -465,7 +469,6 @@ public class GameController : MonoBehaviour {
 			Collider[] hitColliders = Physics.OverlapSphere(pos, spawn_radius);
 
 			if (hitColliders.Length == 0) {
-				// no collisions. spawn here
 				return pos;
 			}
 		}

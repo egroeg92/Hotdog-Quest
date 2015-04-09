@@ -109,13 +109,13 @@ public class Server : MonoBehaviour{
 
 	}
 	[RPC]
-	public void playerHitServer(int id, float health, NetworkPlayer p){
-		game.playerHit (id, health, true);
-		networkView.RPC ("playerHitReceive",RPCMode.All, id, health, p);
+	public void playerHitServer(int id, float health,Vector3 position, NetworkPlayer p){
+		game.playerHit (id,position, health, true);
+		networkView.RPC ("playerHitReceive",RPCMode.All, id,position, health, p);
 	}
 	[RPC]
-	public void playerHitServer(int id, float health){
-		networkView.RPC ("playerHitReceive",RPCMode.All, id, health, Network.player);
+	public void playerHitServer(int id, float health,Vector3 position){
+		networkView.RPC ("playerHitReceive",RPCMode.All, id,position, health, Network.player);
 	}
 	[RPC]
 	public void latencyCheckSend(){
@@ -189,25 +189,26 @@ public class Server : MonoBehaviour{
 	}
 	[RPC]
 	void updatePlayerPosition(Vector3 position,Vector3 velocity, NetworkPlayer player){
+
 		if (game.deadReckoningOn)
 			playerUpdateCountDR ++;
 		else
 			playerUpdateCountNoDR++;
 
+		if (connections == 2) {
+			if (player == player1) {
+				game.updatePlayerServer (1, position, velocity, latency1);
+				if (player2 != null)
+					networkView.RPC ("receivePlayerUpdate", RPCMode.All, player2, position, velocity, clientToclientLatency);
 
-		if (player == player1) {
-			game.updatePlayerServer(1,position,velocity,latency1);
-			if(player2 !=null)
-				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player2, position,  velocity,clientToclientLatency);
-
-		} else if (player == player2) {
-			game.updatePlayerServer(2,position,velocity,latency2);
-			if(player1!=null)
-				networkView.RPC ("receivePlayerUpdate", RPCMode.All, player1, position,  velocity,clientToclientLatency);
-		} else {
-			Debug.Log ("trying to update wrong player");
+			} else if (player == player2) {
+				game.updatePlayerServer (2, position, velocity, latency2);
+				if (player1 != null)
+					networkView.RPC ("receivePlayerUpdate", RPCMode.All, player1, position, velocity, clientToclientLatency);
+			} else {
+				Debug.Log ("trying to update wrong player");
+			}
 		}
-
 
 	}
 
@@ -238,7 +239,7 @@ public class Server : MonoBehaviour{
 	[RPC]
 	void newEnemy(int id,Vector3 pos, Vector3 velocity, NetworkPlayer p, float latency){}
 	[RPC]
-	void playerHitReceive(int id, float health,NetworkPlayer p){}
+	void playerHitReceive(int id,Vector3 position, float health,NetworkPlayer p){}
 
 	[RPC]
 	void enemyShotRecieve(int id){}
