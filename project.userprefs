@@ -1,15 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Enemy.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GameController.cs">
     <Files>
-      <File FileName="Assets\Scripts\Menu\Client.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Menu\Server.cs" Line="192" Column="1" />
-      <File FileName="Assets\Scripts\Player.cs" Line="97" Column="1" />
-      <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Enemy.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\enemy1.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\enemyMovement1.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Menu\Menu.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player.cs" Line="64" Column="58" />
+      <File FileName="Assets\Scripts\GameController.cs" Line="466" Column="25" />
+      <File FileName="Assets\Scripts\Menu\Server.cs" Line="206" Column="1" />
+      <File FileName="Assets\Scripts\Menu\Client.cs" Line="35" Column="67" />
+      <File FileName="Assets\Scripts\Menu\Menu.cs" Line="83" Column="6" />
+      <File FileName="Assets\Scripts\Enemy.cs" Line="69" Column="29" />
+      <File FileName="Assets\Scripts\mapGen.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

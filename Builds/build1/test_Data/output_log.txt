@@ -16,21 +16,9 @@ Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\bu
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.091 seconds
+- Completed reload, in  0.082 seconds
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\System.Core.dll (this message is harmless)
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\System.dll (this message is harmless)
-server started
- 
-(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
-
-Player  connected from 142.157.166.161
- 
-(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
-
-sending map...
- 
-(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
-
