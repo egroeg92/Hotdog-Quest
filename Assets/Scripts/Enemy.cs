@@ -88,9 +88,9 @@ public class Enemy : NPC {
 		if (col.gameObject.tag == "bullet") {
 			Debug.Log ("hit enemy");
 			game.enemyShot(id, false);
+			Destroy (gameObject);
 		}
 
-		Destroy (gameObject);
 
 	}
 }

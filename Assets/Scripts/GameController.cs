@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour {
 
 	public bool deadReckoningOn = false;
 
-	GameObject plane;
+	public GameObject plane;
 
 	int playerId = -1;
 
@@ -99,7 +99,6 @@ public class GameController : MonoBehaviour {
 			otherPlayer = Player2;
 			playerId = 1;
 
-
 		} else {
 			Debug.Log("set to player 2");
 			instantiatePlayers();
@@ -111,9 +110,12 @@ public class GameController : MonoBehaviour {
 		mainCamera.transform.position = thisPlayer.transform.position + new Vector3(0,20,0);
 		mainCamera.transform.parent = thisPlayer.transform;
 
-		Player1.transform.position = new Vector3 (1, 2, 1);
+		Player1.transform.position = getValidPosition();
+		Player2.transform.position = getValidPosition();
 
-		Player2.transform.position = new Vector3 (3, 2, 1);
+
+		Player1.id = 1;
+		Player2.id = 2;
 
 
 		thisPlayer.enablePlayerControls();
@@ -175,6 +177,22 @@ public class GameController : MonoBehaviour {
 	 *  UPDATES
 	 */
 	void Update () {
+		if (Player1 != null && Player2 != null) {
+
+			//Refactor lives on server to disable moving
+
+			if(Player1.getHealth() <= 0){
+				Player1.renderer.material.color = Color.black;
+				Player1.livesOnServer = true;
+			}
+
+			if(Player2.getHealth() <= 0){
+				Player2.renderer.material.color = Color.black;
+				Player2.livesOnServer = true;
+			}
+
+		}
+
 		if(deadReckoningOn){
 			updatePlayersDeadReckoning();
 			updateEnemiesDeadReckoning();
@@ -263,7 +281,37 @@ public class GameController : MonoBehaviour {
 
 		}
 	}
+	public void playerHit (int id, float health, bool received){
+		if (client != null && !received) {
+			if (id == 1) {
+				client.playerHitClient (id, Player1.getHealth ());
+				playerSetHealth (id, health);
 
+			} else if (id == 2) {
+				client.playerHitClient (id, Player2.getHealth ());
+				playerSetHealth (id, health);
+
+			}
+		} else if (server != null && !received) {
+			if (id == 1) {
+				server.playerHitServer (id, Player1.getHealth ());
+				playerSetHealth (id, health);
+
+			} else if (id == 2) {
+				server.playerHitServer (id, Player2.getHealth ());
+				playerSetHealth (id, health);
+
+			}
+		}
+
+	}
+	void playerSetHealth(int id , float health){
+		if (id == 1) {
+			Player1.setHealth (health);
+		} else if (id == 2) {
+			Player2.setHealth (health);
+		}
+	}
 	/*
 	 * GETTERS
 	*/
