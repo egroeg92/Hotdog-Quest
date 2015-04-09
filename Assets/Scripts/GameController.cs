@@ -183,12 +183,12 @@ public class GameController : MonoBehaviour {
 
 			if(Player1.getHealth() <= 0){
 				Player1.renderer.material.color = Color.black;
-				Player1.livesOnServer = true;
+				Player1.Dead = true;
 			}
 
 			if(Player2.getHealth() <= 0){
 				Player2.renderer.material.color = Color.black;
-				Player2.livesOnServer = true;
+				Player2.Dead = true;
 			}
 
 		}

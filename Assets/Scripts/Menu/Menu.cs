@@ -79,7 +79,7 @@ public class Menu : MonoBehaviour {
 					GUI.Label(new Rect(100,0,100,50), "Player 1 Health " + game.Player1.getHealth() + "/ 100");
 				}
 				if(game.Player2.getHealth() <= 0){
-					GUI.Label(new Rect(100,0,100,50), "Player 2 is DEAD");
+					GUI.Label(new Rect(300,0,100,50), "Player 2 is DEAD");
 
 				}else{
 					GUI.Label(new Rect(300,0,100,50), "Player 2 Health " + game.Player2.getHealth() + "/ 100");

@@ -10,6 +10,7 @@ public class Player : NPC {
 
 	public Vector3 shootPoint;
 
+	public bool Dead = false;
 
 
 	public Player(Vector3 position) : base(position){}
@@ -29,7 +30,8 @@ public class Player : NPC {
 
 	// Update is called once per frame
 	void Update () {
-		if (this.getOnServer()) {
+		Debug.Log (beingHit);
+		if (this.getOnServer() && !Dead) {
 			pastVelocity = velocity;
 			velocity = MoveVector ();
 			velocity = velocity.normalized * speed;
