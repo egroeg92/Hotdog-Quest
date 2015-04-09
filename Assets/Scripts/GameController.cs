@@ -100,6 +100,7 @@ public class GameController : MonoBehaviour {
 		e.id = key;
 		e.velocity = new Vector3 (Random.Range (0.0f, enemySpeed), 0, Random.Range (0.0f, enemySpeed));
 		e.setMaxVelocity (enemySpeed);
+		e.livesOnServer = true;
 		enemies.Add(key,e);
 
 		return e;
