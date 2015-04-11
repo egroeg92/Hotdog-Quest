@@ -57,9 +57,9 @@ public class Server : MonoBehaviour{
 	}
 
 	void Update(){
-		if(game.deadReckoningOn)
+		if(connections == 2 && game.deadReckoningOn)
 			DRTime += Time.deltaTime;
-		else
+		else if ( connections == 2 && !game.deadReckoningOn)
 			noDRTime += Time.deltaTime;
 
 		if (Time.frameCount % latencyInterval == 0) {
@@ -95,6 +95,7 @@ public class Server : MonoBehaviour{
 		sendMap (player);
 
 		if (connections == 2) {
+
 			game.instantiatePlayers ();
 			game.createEnemies ();
 			game.instantiateEnemyMovement ();
