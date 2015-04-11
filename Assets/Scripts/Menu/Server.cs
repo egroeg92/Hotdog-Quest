@@ -9,7 +9,7 @@ public class Server : MonoBehaviour{
 
 	public GameController game;
 	public NetworkView networkView;
-	public int enemyAmount = 3;
+	public int enemyAmount;
 
 	public int playerUpdateCountDR = 0;
 	public int playerUpdateCountNoDR = 0;
@@ -33,7 +33,7 @@ public class Server : MonoBehaviour{
 
 	void Start(){
 		Debug.Log ("server started");
-		game.enemyAmount = enemyAmount;
+		enemyAmount = game.enemyAmount;
 		game.createMap ();
 
 		latency1 = 0;
