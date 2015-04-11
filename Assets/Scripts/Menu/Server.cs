@@ -193,9 +193,9 @@ public class Server : MonoBehaviour{
 	[RPC]
 	void updatePlayerPosition(Vector3 position,Vector3 velocity, NetworkPlayer player){
 
-		if (game.deadReckoningOn)
+		if (game.deadReckoningOn && connections == 2)
 			playerUpdateCountDR ++;
-		else
+		else if (!game.deadReckoningOn && connections == 2)
 			playerUpdateCountNoDR++;
 
 		if (connections == 2) {

@@ -141,7 +141,7 @@ public class Menu : MonoBehaviour {
 
 
 				GUI.Label(new Rect(200,500,250,50), "Player 1 latency " + game.server.latency1);
-				GUI.Label(new Rect(300,500,250,50), "Player 2 latency " + game.server.latency2);
+				GUI.Label(new Rect(400,500,250,50), "Player 2 latency " + game.server.latency2);
 
 
 
