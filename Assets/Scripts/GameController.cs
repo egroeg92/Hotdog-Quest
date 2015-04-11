@@ -24,11 +24,14 @@ public class GameController : MonoBehaviour {
 	public float playerSpeed;
 	public float bulletSpeed = 5;
 	public float enemyRespawnRate = 10;
+	public int enemyLimit = 50;
 
 	public int mapDim = 100;
 	public int mapDiv = 100;
 	public int mapCourtProb = 100;
 	public int mapNoise = 1;
+
+	public int wanderRate = 1;
 
 
 	public bool deadReckoningOn = false;
@@ -90,6 +93,7 @@ public class GameController : MonoBehaviour {
 
 	}
 	public Enemy createNewEnemy(){
+
 		int key = enemies.Count;
 		while (enemies[key] != null)
 			key++;

@@ -69,9 +69,11 @@ public class Server : MonoBehaviour{
 		if (connections == 2) {
 			if(Time.frameCount % newEnemyRate == 0)
 			{
+				if(game.enemies.Count < game.enemyLimit){
 				Enemy e = game.createNewEnemy();
 				networkView.RPC ("newEnemy",RPCMode.All, e.id, e.position, e.velocity,player1, latency1);
 				networkView.RPC ("newEnemy",RPCMode.All, e.id, e.position, e.velocity,player2, latency2);
+				}
 			}
 		}
 

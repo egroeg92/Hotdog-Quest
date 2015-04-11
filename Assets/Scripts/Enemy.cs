@@ -34,7 +34,8 @@ public class Enemy : NPC {
 			if (canSee()) {
 				steering.seek(getClosestPlayer());
 			} else {
-				steering.wander();
+				if(Time.frameCount % game.wanderRate == 0)
+					steering.wander();
 			}
 
 			velocity = steering.update();
