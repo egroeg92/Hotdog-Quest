@@ -43,14 +43,14 @@ public class SteeringManager : MonoBehaviour {
 		Vector3 velocity = host.getVelocity();
 
         // always do collision avoidance
-        steering += collisionAvoidance();
 
-        steering = truncate(steering, MAX_FORCE);
+        steering = Vector3.ClampMagnitude(steering, MAX_AVOID_FORCE);
 		velocity += steering;
-		velocity = truncate(velocity, host.getMaxVelocity());
+		velocity = Vector3.ClampMagnitude(velocity, host.getMaxVelocity());
 
         return velocity;
 	}
+
 
 	protected Vector3 collisionAvoidance(){
         float dynamic_length = (float)host.getVelocity().magnitude / (float)host.getMaxVelocity();
@@ -145,7 +145,7 @@ public class SteeringManager : MonoBehaviour {
         circleCenter = circleCenter.normalized;
         circleCenter *= CIRCLE_DISTANCE;
 
-        Vector3 displacement = new Vector3(1, 0, -1) * CIRCLE_RADIUS;
+        Vector3 displacement = new Vector3(1, 0, 1) * CIRCLE_RADIUS;
 
         displacement = setAngle(displacement, wanderAngle);
 
