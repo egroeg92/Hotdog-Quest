@@ -7,7 +7,7 @@ public class mapGen : MonoBehaviour {
 	public float courtProb;
 	public float neighbourhoodSizeNoise;
 
-	float MIN_BUILDING_DIM = 1;
+	float MIN_BUILDING_DIM = .5f;
 
 	public GameObject plane;
 
@@ -22,26 +22,28 @@ public class mapGen : MonoBehaviour {
 		plane.transform.localScale = new Vector3(dim/10, 1, dim/10);
 		plane.tag = "city";
 
-		GameObject w = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
-		GameObject e = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
-		GameObject n = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
-		GameObject s = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
+	
+		for (float i = plane.renderer.bounds.min.z; i < plane.renderer.bounds.max.z; i++) {
+			GameObject w = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+			w.transform.position = new Vector3(i+.5f,1,plane.renderer.bounds.min.z);
+			GameObject e = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+			e.transform.position = new Vector3(i+.5f,1,plane.renderer.bounds.max.z);
+			w.transform.localScale = new Vector3 (1f, 3, .1f);
+			e.transform.localScale = new Vector3 (1f, 3, .1f);
 
-		n.transform.position = new Vector3 (0, 1, plane.renderer.bounds.max.z);
-		s.transform.position = new Vector3 (0, 1, plane.renderer.bounds.min.z);
-		e.transform.position = new Vector3 (plane.renderer.bounds.max.x, 1, 0);
-		w.transform.position = new Vector3 (plane.renderer.bounds.min.x, 1, 0);
+			GameObject n = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+			n.transform.position = new Vector3(plane.renderer.bounds.min.x, 1 , i+.5f);
+			GameObject s = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+			s.transform.position = new Vector3(plane.renderer.bounds.max.x,1,i+.5f);
+			s.transform.localScale = new Vector3 (.1f, 3, 1f);
+			n.transform.localScale = new Vector3 (.1f, 3, 1f);
 
-		n.transform.localScale = new Vector3 (plane.renderer.bounds.max.x - plane.renderer.bounds.min.x, 3, .1f);
-		s.transform.localScale = new Vector3 (plane.renderer.bounds.max.x - plane.renderer.bounds.min.x, 3, .1f);
-		e.transform.localScale = new Vector3 (.1f, 3, plane.renderer.bounds.max.z - plane.renderer.bounds.min.z);
-		w.transform.localScale = new Vector3 (.1f, 3, plane.renderer.bounds.max.z - plane.renderer.bounds.min.z);
-
-		n.tag = "city";
-		s.tag = "city";
-		e.tag = "city";
-		w.tag = "city";
-
+			e.tag = "city";
+			w.tag = "city";
+			
+			s.tag = "city";
+			n.tag = "city";
+		}
 
 		Vector3 p00 = plane.renderer.bounds.min;
 		Vector3 p10 = new Vector3(plane.renderer.bounds.max.x , 0 , plane.renderer.bounds.min.z);

@@ -376,25 +376,28 @@ public class GameController : MonoBehaviour {
 		this.plane = GameObject.CreatePrimitive(PrimitiveType.Plane);
 		this.plane.transform.localScale = plane;
 		this.plane.tag = "city";
-		GameObject w = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
-		GameObject e = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
-		GameObject n = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
-		GameObject s = GameObject.CreatePrimitive (PrimitiveType.Cube) as GameObject;
 
-		n.transform.position = new Vector3 (0, 1, this.plane.renderer.bounds.max.z);
-		s.transform.position = new Vector3 (0, 1, this.plane.renderer.bounds.min.z);
-		e.transform.position = new Vector3 (this.plane.renderer.bounds.max.x, 1, 0);
-		w.transform.position = new Vector3 (this.plane.renderer.bounds.min.x, 1, 0);
-
-		n.transform.localScale = new Vector3 (this.plane.renderer.bounds.max.x - this.plane.renderer.bounds.min.x, 3, .1f);
-		s.transform.localScale = new Vector3 (this.plane.renderer.bounds.max.x - this.plane.renderer.bounds.min.x, 3, .1f);
-		e.transform.localScale = new Vector3 (.1f, 3, this.plane.renderer.bounds.max.z - this.plane.renderer.bounds.min.z);
-		w.transform.localScale = new Vector3 (.1f, 3, this.plane.renderer.bounds.max.z - this.plane.renderer.bounds.min.z);
-
-		n.tag = "city";
-		s.tag = "city";
-		e.tag = "city";
-		w.tag = "city";
+		for (float i = plane.renderer.bounds.min.z; i < plane.renderer.bounds.max.z; i++) {
+			GameObject w = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+			w.transform.position = new Vector3(i+.5f,1,plane.renderer.bounds.min.z);
+			GameObject e = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+			e.transform.position = new Vector3(i+.5f,1,plane.renderer.bounds.max.z);
+			w.transform.localScale = new Vector3 (1f, 3, .1f);
+			e.transform.localScale = new Vector3 (1f, 3, .1f);
+			
+			GameObject n = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+			n.transform.position = new Vector3(plane.renderer.bounds.min.x, 1 , i+.5f);
+			GameObject s = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+			s.transform.position = new Vector3(plane.renderer.bounds.max.x,1,i+.5f);
+			s.transform.localScale = new Vector3 (.1f, 3, 1f);
+			n.transform.localScale = new Vector3 (.1f, 3, 1f);
+			
+			e.tag = "city";
+			w.tag = "city";
+			
+			s.tag = "city";
+			n.tag = "city";
+		}
 
 		GameObject b;
 		for (int i = 0; i< buildingSize.Count; i++) {

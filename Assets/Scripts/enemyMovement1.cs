@@ -7,7 +7,10 @@ public class enemyMovement1 : MonoBehaviour {
 	public Vector3 pastVelocity;
 
 	public float wanderAngle = 0;
-	public float avoidForce = 1;
+	public float avoidForce = 1f;
+
+	public enemy1 enemy;
+
 
 	ArrayList visiblePlayers;
 
@@ -20,16 +23,24 @@ public class enemyMovement1 : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		pastVelocity = velocity;
+		Vector3 a = avoid ();
+
 		if (canSee ()) {
-			velocity += moveTowards (getClosestPlayer());
-		} else {
+			velocity += moveTowards (getClosestPlayer ());
+			velocity += a;
+		} else if (a != Vector3.zero) {
+			velocity += a;
+		}else {
 			velocity += wander ();
 		}
 
-		velocity += avoid ();
+
+		Debug.Log (a);
 		velocity = velocity.normalized * speed;
 
-		transform.position += velocity * Time.deltaTime;
+		//Debug.Log (velocity);
+		enemy.transform.position += velocity * Time.deltaTime;
+
 
 	}
 	bool canSee(){
@@ -80,12 +91,17 @@ public class enemyMovement1 : MonoBehaviour {
 		Vector3 avoidanceForce = Vector3.zero;
 		Vector3 forwards = velocity * 3;
 		RaycastHit hit;
-		Physics.Raycast (transform.position, forwards, out hit);
+		Physics.Raycast (enemy.transform.position, forwards, out hit);
 		if (hit.transform != null) {
 			if (hit.distance < 3) {
-				Vector3 obstacleCenter = hit.transform.position;
-				avoidanceForce = forwards - obstacleCenter;
+				Vector2 obstacleCenter = new Vector2(hit.transform.position.x, hit.transform.position.z);
+				Vector2 e = new Vector2(enemy.transform.position.x, enemy.transform.position.z);
+				Debug.DrawLine(hit.transform.position, enemy.transform.position);
+				avoidanceForce = new Vector3(e.x - obstacleCenter.x, 0, e.y - obstacleCenter.y);
 				avoidanceForce = avoidanceForce.normalized * avoidForce;
+				Debug.Log (avoidanceForce.x);
+
+
 			}
 		}
 		return avoidanceForce;
