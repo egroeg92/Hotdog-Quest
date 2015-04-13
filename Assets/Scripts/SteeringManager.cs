@@ -43,12 +43,30 @@ public class SteeringManager : MonoBehaviour {
 		Vector3 velocity = host.getVelocity();
 
         // always do collision avoidance
+        steering += avoid();
 
         steering = Vector3.ClampMagnitude(steering, MAX_AVOID_FORCE);
 		velocity += steering;
 		velocity = Vector3.ClampMagnitude(velocity, host.getMaxVelocity());
 
         return velocity;
+	}
+	Vector3 avoid(){
+		Vector3 avoidanceForce = Vector3.zero;
+		Vector3 forwards = host.getVelocity() * 3;
+		RaycastHit hit;
+		Physics.Raycast (host.transform.position, forwards, out hit);
+		if (hit.transform != null) {
+			if (hit.transform.gameObject.name == "Building") {
+				if (hit.distance < 3) {
+					Vector3 obstacleCenter = hit.transform.position;
+					avoidanceForce = host.transform.position + forwards - obstacleCenter;
+					avoidanceForce = avoidanceForce.normalized;
+					Debug.DrawRay(host.getPosition(), avoidanceForce, Color.black);
+				}
+			}
+		}
+		return avoidanceForce;
 	}
 
 

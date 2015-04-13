@@ -37,13 +37,13 @@ public class Enemy : NPC {
 			if (canSee()) {
 				steering.seek(getClosestPlayer());
 			} else {
-				avoidVector = steering.avoid();
+				//avoidVector = avoid();
 			}
 			// if nothing to avoid, wander
-			if (avoidVector == Vector3.zero && Time.frameCount  % wanderRate == 0 ) {
+			if (Time.frameCount  % wanderRate == 0 ) {
 			  	steering.wander();
 			} else {
-				velocity += avoidVector;
+				//velocity += avoidVector;
 			}
 			velocity = steering.update();
 			velocity.y = 0;
@@ -55,27 +55,10 @@ public class Enemy : NPC {
 			if(game.isOutOfBounds(transform.position)){
 				transform.position = game.getValidPosition();
 			}
-			                      
+
 		}
 	}
 
-	Vector3 avoid(){
-		Vector3 avoidanceForce = Vector3.zero;
-		Vector3 forwards = velocity * 3;
-		RaycastHit hit;
-		Physics.Raycast (transform.position, forwards, out hit);
-		if (hit.transform != null) {
-			if (hit.transform.gameObject.name == "Building") {
-				if (hit.distance < 3) {
-					Vector3 obstacleCenter = hit.transform.position;
-					avoidanceForce = transform.position + forwards - obstacleCenter;
-					avoidanceForce = avoidanceForce.normalized;
-					Debug.DrawRay(getPosition(), avoidanceForce, Color.black);
-				}
-			}
-		}
-		return avoidanceForce;
-	}
 	bool canSee(){
 		visiblePlayers.Clear();
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
