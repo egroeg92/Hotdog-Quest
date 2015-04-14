@@ -6,7 +6,6 @@ public class Player : NPC {
 	Bullet bullet;
 
 	public float speed;
-	public Vector3 lastPosition, lastlastPosition;
 
 	public Vector3 shootPoint;
 
@@ -21,10 +20,6 @@ public class Player : NPC {
 		base.Start ();
 		setHealth (100);
 		gameObject.rigidbody.freezeRotation = true;
-
-		//disablePlayerControls ();
-		lastPosition = transform.position;
-		lastlastPosition = transform.position;
 		speed = game.playerSpeed;
 	}
 
@@ -58,7 +53,6 @@ public class Player : NPC {
 		if (Input.GetMouseButtonDown(0)){
 			// instantiate a bullet prefab
 			Bullet bulletClone;
-//			Debug.Log(fireDirection());
 			Vector3 bulletPosition =  getPosition() + fireDirection();
 			bulletClone = Instantiate(Resources.Load("Bullet", typeof(Bullet)), bulletPosition, Quaternion.identity) as Bullet;
 			bulletClone.velocity = fireDirection() * game.bulletSpeed;

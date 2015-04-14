@@ -10,6 +10,8 @@ public class Enemy : NPC {
 	public Transform target2;
 	public ArrayList visiblePlayers;
 
+	int wanderRate;
+
 	public Enemy (Vector3 position) : base(position) {
 		Debug.Log("Enemy created at " +position);
 	}
@@ -20,7 +22,7 @@ public class Enemy : NPC {
 		tag = "enemy";
 		this.steering = new SteeringManager(this);
 		this.visiblePlayers = new ArrayList();
-
+		wanderRate = game.wanderRate;
 	}
 
 	// Update is called once per frame
@@ -35,19 +37,17 @@ public class Enemy : NPC {
 			if (canSee()) {
 				steering.seek(getClosestPlayer());
 			} else {
-				avoidVector = avoid();
+				avoidVector = steering.avoid();
 			}
 			// if nothing to avoid, wander
-			if (avoidVector == Vector3.zero) {
+			if (avoidVector == Vector3.zero && Time.frameCount  % wanderRate == 0 ) {
 			  	steering.wander();
-			 	velocity = steering.update();
 			} else {
 				velocity += avoidVector;
 			}
-
+			velocity = steering.update();
 			velocity.y = 0;
 			// //Update movement
-			// //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), 4 * Time.deltaTime);
 
 			velocity = Vector3.ClampMagnitude(velocity, getMaxVelocity());
 			transform.position +=(velocity * Time.deltaTime);
