@@ -35,7 +35,6 @@ public class enemyMovement1 : MonoBehaviour {
 		}
 
 
-		Debug.Log (a);
 		velocity = velocity.normalized * speed;
 
 		//Debug.Log (velocity);
