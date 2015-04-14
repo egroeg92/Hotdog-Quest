@@ -121,7 +121,6 @@ public class GameController : MonoBehaviour {
 	}
 	public void createMap(){
 		mapGenerator = Instantiate (mapGenerator) as mapGen;
-
 	}
 
 	public void addPosition(Vector3 p){
@@ -462,7 +461,7 @@ public class GameController : MonoBehaviour {
 	/*
 	 * Helpers
 	 */
-	Vector3 getValidPosition(){
+	public Vector3 getValidPosition(){
 		// check for an empty position
 		if (plane == null) {
 			plane = mapGenerator.plane;
@@ -479,6 +478,18 @@ public class GameController : MonoBehaviour {
 				return pos;
 			}
 		}
+	}
+	public bool isOutOfBounds(Vector3 pos){
+		if (plane == null && mapGenerator != null) {
+			plane = mapGenerator.plane;
+		}
+		if (pos.x < this.plane.renderer.bounds.min.x ||
+			pos.x > this.plane.renderer.bounds.max.x ||
+			pos.z < this.plane.renderer.bounds.min.z ||
+			pos.z > this.plane.renderer.bounds.max.z) {
+			return true;
+		}
+		return false;
 	}
 
 	Vector3 deadReckoningPlayer(Player player){

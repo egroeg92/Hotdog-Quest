@@ -29,35 +29,65 @@ public class Enemy : NPC {
 
 		// on sever, do own movement
 		if (this.getOnServer()){
+			Vector3 avoidVector = Vector3.zero;
 
-			// check if player visible, if so do seek, else wander
+			//check if player visible, if so do seek, else wander
 			if (canSee()) {
 				steering.seek(getClosestPlayer());
 			} else {
-				if(Time.frameCount % game.wanderRate == 0)
-					steering.wander();
+				avoidVector = avoid();
+			}
+			// if nothing to avoid, wander
+			if (avoidVector == Vector3.zero) {
+			  	steering.wander();
+			 	velocity = steering.update();
+			} else {
+				velocity += avoidVector;
 			}
 
-			velocity = steering.update();
-			velocity = truncate(velocity, MAX_VELOCITY);
-			//Update movement
-			//transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), 4 * Time.deltaTime);
-			transform.Translate(velocity * Time.deltaTime);
-		}
+			velocity.y = 0;
+			// //Update movement
+			// //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(velocity), 4 * Time.deltaTime);
 
+			velocity = Vector3.ClampMagnitude(velocity, getMaxVelocity());
+			transform.position +=(velocity * Time.deltaTime);
+
+			if(game.isOutOfBounds(transform.position)){
+				transform.position = game.getValidPosition();
+			}
+			                      
+		}
 	}
 
+	Vector3 avoid(){
+		Vector3 avoidanceForce = Vector3.zero;
+		Vector3 forwards = velocity * 3;
+		RaycastHit hit;
+		Physics.Raycast (transform.position, forwards, out hit);
+		if (hit.transform != null) {
+			if (hit.transform.gameObject.name == "Building") {
+				if (hit.distance < 3) {
+					Vector3 obstacleCenter = hit.transform.position;
+					avoidanceForce = transform.position + forwards - obstacleCenter;
+					avoidanceForce = avoidanceForce.normalized;
+					Debug.DrawRay(getPosition(), avoidanceForce, Color.black);
+				}
+			}
+		}
+		return avoidanceForce;
+	}
 	bool canSee(){
 		visiblePlayers.Clear();
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 
 		foreach (GameObject p in players) {
 			RaycastHit hit;
-			Debug.DrawRay(transform.position, p.transform.position - transform.position, Color.black);
 			Physics.Raycast(transform.position,p.transform.position - transform.position , out hit);
 			if(hit.transform != null){
-				if(hit.transform.gameObject == p)
+				if(hit.transform.gameObject == p){
 					visiblePlayers.Add(p);
+					Debug.DrawRay(transform.position, p.transform.position - transform.position, Color.black);
+					}
 			}
 
 		}
@@ -87,4 +117,5 @@ public class Enemy : NPC {
 			Destroy (gameObject);
 		}
 	}
+
 }

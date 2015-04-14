@@ -58,7 +58,7 @@ public class Player : NPC {
 		if (Input.GetMouseButtonDown(0)){
 			// instantiate a bullet prefab
 			Bullet bulletClone;
-			Debug.Log(fireDirection());
+//			Debug.Log(fireDirection());
 			Vector3 bulletPosition =  getPosition() + fireDirection();
 			bulletClone = Instantiate(Resources.Load("Bullet", typeof(Bullet)), bulletPosition, Quaternion.identity) as Bullet;
 			bulletClone.velocity = fireDirection() * game.bulletSpeed;
