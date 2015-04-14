@@ -55,22 +55,11 @@
      <Compile Include="Assets\Scripts\Menu\Server.cs" />
      <Compile Include="Assets\Scripts\NPC.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
-     <Compile Include="Assets\Scripts\PlayerCharacter.cs" />
-     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\SteeringManager.cs" />
-     <Compile Include="Assets\Scripts\enemy1.cs" />
-     <Compile Include="Assets\Scripts\enemyMovement1.cs" />
      <Compile Include="Assets\Scripts\mapGen.cs" />
- <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>C:/Users/George/Documents/Mcgill/Comp521MCG/project/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
- </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.3/UnityEngine.UI.dll</HintPath>
  </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp-firstpass-vs.csproj">
-      <Project>{A2F055FC-82E1-E36B-E172-6C2074565427}</Project>      <Name>Assembly-CSharp-firstpass-vs</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,14 +1,14 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SteeringManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Menu\Server.cs">
     <Files>
-      <File FileName="Assets\Scripts\SteeringManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Menu\Server.cs" Line="138" Column="14" />
+      <File FileName="Assets\Scripts\SteeringManager.cs" Line="20" Column="40" />
       <File FileName="Assets\Scripts\Player.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Menu\Server.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\NPC.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Menu\Client.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Enemy.cs" Line="40" Column="24" />
+      <File FileName="Assets\Scripts\Enemy.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
