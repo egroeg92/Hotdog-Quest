@@ -131,9 +131,11 @@ public class Server : MonoBehaviour{
 	public void latencyCheckReceive(NetworkPlayer p){
 		if (p == player1) {
 			latency1 = Time.realtimeSinceStartup - timeSent;
+			latency1 /= 2;
 
 		} else if (p == player2){
 			latency2 = Time.realtimeSinceStartup - timeSent;
+			latency2 /= 2;
 		}
 		clientToclientLatency = latency1 + latency2;
 	}
