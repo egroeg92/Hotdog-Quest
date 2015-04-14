@@ -43,13 +43,15 @@ public class SteeringManager : MonoBehaviour {
 		Vector3 velocity = host.getVelocity();
 
         // always do collision avoidance
-        steering += avoid();
-
+        
         steering = Vector3.ClampMagnitude(steering, MAX_AVOID_FORCE);
 		velocity += steering;
 		velocity = Vector3.ClampMagnitude(velocity, host.getMaxVelocity());
 
         return velocity;
+	}
+	public void doAvoid(){
+		steering += avoid();
 	}
 	Vector3 avoid(){
 		Vector3 avoidanceForce = Vector3.zero;

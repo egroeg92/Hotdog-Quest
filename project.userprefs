@@ -1,13 +1,14 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Player.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\SteeringManager.cs">
     <Files>
-      <File FileName="Assets\Scripts\Player.cs" Line="61" Column="3" />
-      <File FileName="Assets\Scripts\enemy1.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\enemyMovement1.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\mapGen.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Player.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GameController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Enemy.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Menu\Server.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\NPC.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Menu\Client.cs" Line="66" Column="82" />
+      <File FileName="Assets\Scripts\Enemy.cs" Line="40" Column="24" />
+      <File FileName="Assets\Scripts\SteeringManager.cs" Line="52" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

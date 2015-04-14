@@ -37,13 +37,11 @@ public class Enemy : NPC {
 			if (canSee()) {
 				steering.seek(getClosestPlayer());
 			} else {
-				//avoidVector = avoid();
+				steering.doAvoid();
 			}
 			// if nothing to avoid, wander
 			if (Time.frameCount  % wanderRate == 0 ) {
 			  	steering.wander();
-			} else {
-				//velocity += avoidVector;
 			}
 			velocity = steering.update();
 			velocity.y = 0;
