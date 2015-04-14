@@ -16,10 +16,12 @@ Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\bu
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.042 seconds
+- Completed reload, in  0.084 seconds
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
+Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\System.Core.dll (this message is harmless)
+Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\System.dll (this message is harmless)
 Initialize engine version: 4.6.3f1 (4753d8b6ef2b)
 GfxDevice: creating device client; threaded=1
 Direct3D:
@@ -38,14 +40,24 @@ Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\bu
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\Assembly-UnityScript-firstpass.dll into Unity Child Domain
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\UnityEngine.UI.dll (this message is harmless)
 Loading C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\UnityEngine.UI.dll into Unity Child Domain
-- Completed reload, in  0.042 seconds
+- Completed reload, in  0.040 seconds
 desktop: 1600x900 60Hz; virtual: 1600x900 at 0,0
 <RI> Initializing input.
 <RI> Input initialized.
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\System.Core.dll (this message is harmless)
+server started
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
 Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\System.dll (this message is harmless)
-Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\System.Core.dll (this message is harmless)
-Platform assembly: C:\Users\George\Documents\Mcgill\Comp521MCG\project\Builds\build1\test_Data\Managed\System.dll (this message is harmless)
+Player  connected from 142.157.166.48
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+sending map...
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
 map gen
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
@@ -54,7 +66,11 @@ Set to player 1
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-map gen
+Player  connected from 142.157.166.48
+ 
+(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+
+sending map...
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
@@ -66,11 +82,108 @@ Create Enemies
  
 (Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
 
-Create Enemies
- 
-(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+Couldn't send RPC function 'receiveEnemyUpdate'
 
-set to player 2
  
-(Filename: C:/buildslave/unity/build/artifacts/StandalonePlayerGenerated/UnityEngineDebug.cpp Line: 56)
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receiveEnemyUpdate'
+
+ 
+(Filename:  Line: 2463)
+
+Couldn't send RPC function 'receivePlayerUpdate'
+
+ 
+(Filename:  Line: 2463)
 
